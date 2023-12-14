@@ -1,0 +1,6 @@
+{
+  "ignore": [".git", "node_modules", "dist"],
+  "watch": ["./src/index.ts", "./src/controllers/**/*", "./src/routes/**/*"],
+  "exec": "pnpm dev",
+  "ext": "ts"
+}

@@ -1,42 +1,65 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import Home from "./pages/Home/index";
-import Dashboard from "./pages/Dashboard/index";
+import Landing from "./pages/Landing/index";
 import "./index.css";
-import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-react";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
-import SignIn from "./pages/SignIn";
-import SignUp from "./pages/SignUp";
+import {
+  createBrowserRouter,
+  redirect,
+  RouterProvider,
+} from "react-router-dom";
+import Verify from "./pages/Verify";
+import PageNotFound from "./pages/404";
+import SessionVerify from "./lib/SessionVerify";
+import { SessionVerifyProps } from "./components/types/SessionVerifyProps.interface";
+import Onboarding from "./pages/Onboarding";
 
-export const ClerkProviderRoutes = () => {
-  return (
-    <ClerkProvider publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route
-          path="/dashboard"
-          element={
-            <>
-              <SignedIn>
-                <Dashboard />
-              </SignedIn>
-              <SignedOut>
-                <div>SignedOut</div>
-              </SignedOut>
-            </>
-          }
-        />
-      </Routes>
-    </ClerkProvider>
-  );
-};
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Landing />,
+    loader: async () => {
+      return SessionVerify().then((data: SessionVerifyProps | null) => {
+        if (data !== null) {
+          return data.success
+            ? data.data.onBoarded
+              ? redirect("/home")
+              : redirect("/onboarding")
+            : null;
+        }
+        return null;
+      });
+    },
+  },
+  {
+    path: "/home",
+    element: <Home />,
+    loader: async () => {
+      return SessionVerify().then((data: SessionVerifyProps | null) => {
+        return data!.success
+          ? data!.data.onBoarded
+            ? null
+            : redirect("/onboarding")
+          : redirect("/");
+      });
+    },
+  },
+  {
+    path: "/verify/:token",
+    element: <Verify />,
+  },
+  {
+    path: "*",
+    element: <PageNotFound />,
+  },
+  {
+    path: "/onboarding",
+    element: <Onboarding />,
+  },
+]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <ClerkProviderRoutes />
-    </BrowserRouter>
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
