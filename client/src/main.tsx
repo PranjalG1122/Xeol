@@ -11,23 +11,22 @@ import {
 import Verify from "./pages/Verify";
 import PageNotFound from "./pages/404";
 import SessionVerify from "./lib/SessionVerify";
-import { SessionVerifyProps } from "./components/types/SessionVerifyProps.interface";
 import Onboarding from "./pages/Onboarding";
+import Post from "./pages/Post";
+import { SessionVerifyProps } from "./components/types/Types";
+import User from "./pages/User";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Landing />,
     loader: async () => {
-      return SessionVerify().then((data: SessionVerifyProps | null) => {
-        if (data !== null) {
-          return data.success
-            ? data.data.onBoarded
-              ? redirect("/home")
-              : redirect("/onboarding")
-            : null;
-        }
-        return null;
+      return SessionVerify().then((data: SessionVerifyProps) => {
+        return data.verified
+          ? data.onboarded
+            ? redirect("/home")
+            : redirect("/onboarding")
+          : null;
       });
     },
   },
@@ -35,9 +34,35 @@ const router = createBrowserRouter([
     path: "/home",
     element: <Home />,
     loader: async () => {
-      return SessionVerify().then((data: SessionVerifyProps | null) => {
-        return data!.success
-          ? data!.data.onBoarded
+      return SessionVerify().then((data: SessionVerifyProps) => {
+        return data.verified
+          ? data.onboarded
+            ? null
+            : redirect("/onboarding")
+          : redirect("/");
+      });
+    },
+  },
+  {
+    path: "/onboarding",
+    element: <Onboarding />,
+    loader: async () => {
+      return SessionVerify().then((data: SessionVerifyProps) => {
+        return data.verified
+          ? data.onboarded
+            ? redirect("/home")
+            : null
+          : redirect("/");
+      });
+    },
+  },
+  {
+    path: "/u/:username",
+    element: <User />,
+    loader: async () => {
+      return SessionVerify().then((data: SessionVerifyProps) => {
+        return data.verified
+          ? data.onboarded
             ? null
             : redirect("/onboarding")
           : redirect("/");
@@ -47,14 +72,32 @@ const router = createBrowserRouter([
   {
     path: "/verify/:token",
     element: <Verify />,
+    loader: async () => {
+      return SessionVerify().then((data: SessionVerifyProps) => {
+        return data.verified
+          ? data.onboarded
+            ? redirect("/home")
+            : redirect("/onboarding")
+          : null;
+      });
+    },
+  },
+  {
+    path: "/post/:id",
+    element: <Post />,
+    loader: async () => {
+      return SessionVerify().then((data: SessionVerifyProps) => {
+        return data.verified
+          ? data.onboarded
+            ? null
+            : redirect("/onboarding")
+          : redirect("/");
+      });
+    },
   },
   {
     path: "*",
     element: <PageNotFound />,
-  },
-  {
-    path: "/onboarding",
-    element: <Onboarding />,
   },
 ]);
 

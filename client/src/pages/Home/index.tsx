@@ -1,24 +1,19 @@
-import Container from "../../components/Hooks/Container";
+import Container from "../../components/Container";
 
 export default function Home() {
+  const url = new URL(window.location.href);
+  console.log(url.searchParams.getAll("country"));
+  document.title = "Home / Xeol";
+
   return (
     <Container>
-      <section className="w-full max-w-3xl gap-8 flex flex-col">
-        <h1 className="text-4xl font-bold">What is new Today?</h1>
-        <div className="flex flex-row items-center gap-8">
+      <section className="w-full max-w-3xl gap-6 flex flex-col h-full flex-grow justify-start">
+        <div className="flex flex-row items-center gap-6 font-semibold text-sm">
           <p>For You</p>
           <p>Global</p>
           <p>Following</p>
         </div>
-        {/* <textarea
-          className={
-            "resize-none w-full border overflow-hidden " +
-            "bg-white border-neutral-300 focus:border-neutral-500 focus:outline-none " +
-            "dark:bg-neutral-950 dark:border-neutral-700 dark:focus:border-neutral-500 "
-          }
-          rows={4}
-        /> */}
-        <h1 className="text-4xl font-semibold">Posts</h1>
+        <h1 className="lg:text-2xl text-xl font-semibold">Posts</h1>
       </section>
     </Container>
   );
