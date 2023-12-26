@@ -1,4 +1,4 @@
-import { SessionVerifyProps } from "../components/types/SessionVerifyProps.interface";
+import { SessionVerifyProps } from "../components/types/Types";
 
 export default async function SessionVerify(): Promise<SessionVerifyProps> {
   try {
