@@ -1,15 +1,16 @@
-import { Sun, Moon } from "react-feather";
+import { Sun, Moon, Plus } from "react-feather";
 import { Button } from "./Button";
 import { Link } from "react-router-dom";
 import { useContext, useState } from "react";
 import { useEffect } from "react";
 import { SessionDecode } from "../lib/SessionDecode";
-import NewPost from "./NewPost";
+import CreatePost from "./CreatePost";
 import { UserDetailsContext } from "./Container";
+
+const restrictedPages = ["/", "/*", "/onboarding"];
 
 export default function Navbar() {
   const [newPostInView, setNewPostInView] = useState<boolean>(false);
-
   const [isDarkTheme, setIsDarkTheme] = useState<boolean>(
     localStorage.getItem("isDarkTheme") === "true" ? true : false
   );
@@ -35,17 +36,19 @@ export default function Navbar() {
         />
       </Link>
       <div className="flex flex-row items-center lg:gap-8 gap-4">
-        {SessionDecode() && window.location.pathname !== "/onboarding" && (
-          <Button
-            onClick={() => {
-              setNewPostInView(true);
-            }}
-            variant="outline"
-          >
-            Create Post
-          </Button>
-        )}
-        {window.location.pathname !== "/" && (
+        {SessionDecode() &&
+          !restrictedPages.includes(window.location.pathname) && (
+            <Button
+              onClick={() => {
+                setNewPostInView(true);
+              }}
+              title="Create new post"
+              className="p-1 rounded-full"
+            >
+              <Plus />
+            </Button>
+          )}
+        {!restrictedPages.includes(window.location.pathname) && (
           <Link to={"/u/" + userDetails?.username}>
             <img
               src={userDetails?.avatar}
@@ -63,7 +66,7 @@ export default function Navbar() {
           {isDarkTheme ? <Sun /> : <Moon />}
         </Button>
       </div>
-      {newPostInView && <NewPost setNewPostInView={setNewPostInView} />}
+      {newPostInView && <CreatePost setNewPostInView={setNewPostInView} />}
     </nav>
   );
 }
