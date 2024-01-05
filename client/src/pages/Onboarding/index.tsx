@@ -25,10 +25,10 @@ export default function Onboarding() {
 
   const VALID_USERNAME = /^[a-zA-Z0-9_]{3,25}$/;
 
-  const handleCheckUsername = async () => {
+  const handleCheckUsername = () => {
     if (!VALID_USERNAME.test(userDetails.username))
       return setUsernameValidMessage("Username must be 3-25 characters long");
-    await fetch(import.meta.env.VITE_SERVER_LINK + "/onboarding/username", {
+    fetch(import.meta.env.VITE_SERVER_LINK + "/onboarding/username", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -55,14 +55,14 @@ export default function Onboarding() {
     setObjectURL(URL.createObjectURL(URLBlob));
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     if (!formRef.current) return;
 
     const formData = new FormData(formRef.current);
 
     setSubmitLoading(true);
-    await fetch(import.meta.env.VITE_SERVER_LINK + "/onboarding/update", {
+    fetch(import.meta.env.VITE_SERVER_LINK + "/onboarding/update", {
       method: "POST",
       body: formData,
     })

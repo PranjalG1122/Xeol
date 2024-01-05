@@ -41,7 +41,7 @@ export default function Post() {
       {postDetails && (
         <div className="flex flex-col items-start gap-2 w-full max-w-3xl">
           <h1 className="lg:text-2xl font-medium text-xl">Post</h1>
-          {<PostComponent post={postDetails.post} />}
+          {<PostComponent post={postDetails.post} setPosts={null} />}
           <h1 className="lg:text-xl font-medium text-lg">Replies</h1>
           <article className="flex flex-row items-start gap-4 lg:p-4 p-2 rounded-sm w-full bg-neutral-100 dark:bg-neutral-900 text-sm">
             <Link to="/" className="h-10 w-10">
@@ -63,7 +63,9 @@ export default function Post() {
           </article>
           <div className="flex flex-col items-center gap-2 w-full">
             {postDetails.replies.map((reply: PostProps) => {
-              return <PostComponent key={reply.id} post={reply} />;
+              return (
+                <PostComponent key={reply.id} post={reply} setPosts={null} />
+              );
             })}
           </div>
           {newPostInView && (

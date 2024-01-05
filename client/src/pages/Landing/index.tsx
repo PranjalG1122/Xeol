@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button, variants } from "../../components/Button";
 import { useRef, useState } from "react";
-import { ResponseProps } from "../../components/types/Types";
 import Container from "../../components/Container";
 
 const VALID_EMAIL = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -12,14 +11,14 @@ export default function Landing() {
   const [message, setMessage] = useState<string>("");
   const formRef = useRef<HTMLFormElement>(null);
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     if (!VALID_EMAIL.test(email)) {
       setMessage("Please enter a valid email address.");
       return;
     }
     setLoadingSubmit(true);
-    await fetch(import.meta.env.VITE_SERVER_LINK + "/auth", {
+    fetch(import.meta.env.VITE_SERVER_LINK + "/auth", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +27,7 @@ export default function Landing() {
       body: JSON.stringify({ email }),
     })
       .then((res) => res.json())
-      .then((data: ResponseProps) => {
+      .then((data: { success: boolean }) => {
         if (data.success) {
           setMessage("Email sent!");
           setEmail("");

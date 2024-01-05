@@ -30,12 +30,12 @@ export default function CreatePost({
     }
   }, [content]);
 
-  const handleSubmitPost = async (replyTo: string | null) => {
+  const handleSubmitPost = (replyTo: string | null) => {
     if (content.length < 1) {
       // setError("Post cannot be 0 characters long");
       return;
     }
-    await fetch(import.meta.env.VITE_SERVER_LINK + "/post/newpost", {
+    fetch(import.meta.env.VITE_SERVER_LINK + "/post/newpost", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -135,7 +135,9 @@ export default function CreatePost({
                 variant="icon"
                 title="Pin location to post"
                 onClick={() => {
-                  handleFetchLocation(setLocation);
+                  handleFetchLocation.then((location) => {
+                    setLocation(location);
+                  });
                 }}
               >
                 <MapPin className="h-5 w-5 text-neutral-500" />

@@ -95,7 +95,9 @@ export default function User() {
           <div className="flex flex-col items-center w-full lg:gap-4 gap-2">
             {userDetails.posts &&
               userDetails.posts.map((post: PostProps, index) => {
-                return <PostComponent key={index} post={post} />;
+                return (
+                  <PostComponent key={index} post={post} setPosts={null} />
+                );
               })}
           </div>
         </div>
