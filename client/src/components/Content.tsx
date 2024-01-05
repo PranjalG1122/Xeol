@@ -9,7 +9,9 @@ export default function Content({ text }: { text: string }) {
             <Link
               key={index}
               to={
-                word.startsWith("@") ? "/u/" + word.slice(1, word.length) : "/"
+                word.startsWith("@")
+                  ? "/u/" + word.slice(1, word.length)
+                  : "/home?&tag=" + word.slice(1, word.length)
               }
               className="text-blue-500"
             >
