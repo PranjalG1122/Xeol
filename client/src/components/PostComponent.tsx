@@ -12,6 +12,7 @@ import { handleFollow } from "../lib/handleFollow";
 import CreatePost from "./CreatePost";
 import ReplyToPostComponent from "./ReplyToPostComponent";
 import Content from "./Content";
+import fetchUserDetailsLocal from "../lib/fetchUserDetailsLocal";
 
 export default function PostComponent({
   post,
@@ -24,6 +25,8 @@ export default function PostComponent({
   const [newPostInView, setNewPostInView] = useState<boolean>(false);
   const [loadingSetLike, setLoadingSetLike] = useState<boolean>(false);
   const [postLiked, setPostLiked] = useState<boolean>(post.likes.length > 0);
+
+  const userDetails = fetchUserDetailsLocal();
 
   const handleLike = async () => {
     setLoadingSetLike(true);
@@ -72,6 +75,7 @@ export default function PostComponent({
           src={post.user.avatar ? post.user.avatar : "/default.png"}
           className="rounded-full"
           alt="n"
+          title={post.user.name}
         />
       </Link>
 
@@ -81,10 +85,16 @@ export default function PostComponent({
             to={"/u/" + post.user.username}
             className="flex flex-row items-center gap-1"
           >
-            <p className="font-medium text-black dark:text-white truncate lg:max-w-full max-w-[80px]">
+            <p
+              className="font-medium text-black dark:text-white truncate lg:max-w-full max-w-[80px]"
+              title={post.user.name}
+            >
               {post.user.name}
             </p>
-            <p className="truncate lg:max-w-full max-w-[80px]">
+            <p
+              className="truncate lg:max-w-full max-w-[80px]"
+              title={post.user.username}
+            >
               @{post.user.username}
             </p>
           </Link>
@@ -139,16 +149,18 @@ export default function PostComponent({
           <button title="Share">
             <Share2 className="h-4 w-4 hover:text-blue-500" />
           </button>
-          <button
-            className="flex flex-row items-center gap-1 hover:text-green-500"
-            onClick={() => {
-              handleFollow(post.user.username);
-            }}
-            title="Follow"
-          >
-            <UserPlus className="h-4 w-4" />
-            <p>Follow</p>
-          </button>
+          {userDetails && post.user.username !== userDetails.username && (
+            <button
+              className="flex flex-row items-center gap-1 hover:text-green-500"
+              onClick={() => {
+                handleFollow(post.user.username);
+              }}
+              title="Follow"
+            >
+              <UserPlus className="h-4 w-4" />
+              <p>Follow</p>
+            </button>
+          )}
           <Link
             to={"/post/" + post.id}
             title="Open Post"
