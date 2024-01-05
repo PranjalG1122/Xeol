@@ -1,22 +1,7 @@
-// Success boolean
-export interface Success {
-  success: boolean;
-}
-
-// Props for Responses which only require a success boolean and message string
-export interface ResponseProps extends Success {
-  message: string;
-}
-
 // For the "middleware" which runs before each page load to redirect the user if they are not logged in
 export interface SessionVerifyProps {
   verified: boolean;
   onboarded: boolean;
-}
-
-// Props for the response from the server for a user's details and success boolean
-export interface UserDetailsResponseProps extends Success {
-  userDetails: UserDetailsProps;
 }
 
 // Props of the user details (name, username, avatar). Used when basic user details are needed anywhere
@@ -42,24 +27,38 @@ export interface UserDetailsPageProps {
   };
 }
 
-// Props for each post anywhere on Xeol (city and country can be null since the user might not set it)
+// Props for each post anywhere on Xeol (city and country can be null since the user might have not set it)
 // Used in the Post component
-export type PostProps = {
-  id: number;
+export interface PostProps {
+  id: string;
   createdAt: Date;
   content: string;
   city: string | null;
   country: string | null;
-  user: {
-    username: string;
-    name: string;
-    avatar: string;
-  };
   likes: {
     email: string;
   }[];
+  replyTo: ReplyToPostProps | null;
   _count: {
     likes: number;
     replies: number;
   };
-};
+  user: UserDetailsProps;
+}
+
+// Props for each reply to a post (used in the Post component)
+// It extends the UserProps interface since it has the same user details as a post
+export interface ReplyToPostProps {
+  id: string;
+  createdAt: Date;
+  content: string;
+  user: UserDetailsProps;
+}
+
+// Props for the Followers List component
+export interface FollowersListProps {
+  username: string;
+  avatar: string;
+  name: string;
+  description: string;
+}
