@@ -2,13 +2,17 @@ import { useEffect, useState } from "react";
 import Container from "../../components/Container";
 import PostComponent from "../../components/PostComponent";
 import { PostProps } from "../../components/types/Types";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export default function Home() {
+  const navigate = useNavigate();
+
   document.title = "Home / Xeol";
   const url = new URL(window.location.href);
   const city = url.searchParams.getAll("city");
   const country = url.searchParams.getAll("country");
+
+  const location = useLocation();
 
   const [posts, setPosts] = useState<PostProps[] | null>();
 
@@ -31,6 +35,10 @@ export default function Home() {
       });
   }, []);
 
+  const handleNavigateToMyCity = () => {
+    navigate("/home?city=" + city + "&country=" + country);
+  };
+
   return (
     <Container>
       <section className="w-full max-w-3xl gap-6 flex flex-col h-full flex-grow justify-start">
@@ -39,9 +47,7 @@ export default function Home() {
             to="/home"
             className={
               "font-bold " +
-              (window.location.pathname === "/home"
-                ? "text-orange-500"
-                : "text-neutral-500")
+              (!location.search ? "text-orange-500" : "text-neutral-500")
             }
           >
             Following
@@ -49,10 +55,9 @@ export default function Home() {
           <button
             className={
               "font-semibold " +
-              (window.location.pathname !== "/home"
-                ? "text-orange-500"
-                : "text-neutral-500")
+              (location.search ? "text-orange-500" : "text-neutral-500")
             }
+            onClick={handleNavigateToMyCity}
           >
             Your City
           </button>

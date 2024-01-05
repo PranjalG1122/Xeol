@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { PostProps } from "./types/Types";
 import { Link } from "react-router-dom";
 import fetchUserDetailsLocal from "../lib/fetchUserDetailsLocal";
+import { handleFetchLocation } from "../lib/handleFetchLocation";
 
 export default function CreatePost({
   setNewPostInView,
@@ -55,35 +56,6 @@ export default function CreatePost({
         alert("Erro2");
         // setMessage(data.message);
       });
-  };
-
-  const handleAddLocation = () => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        if (!position) {
-          return;
-        }
-        fetch(
-          import.meta.env.VITE_LOCATION_API_LINK +
-            `/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&format=json&addressdetails=1&zoom=10`
-        ).then((res) => {
-          res.json().then((data) => {
-            setLocation({
-              city: data.address.city,
-              country: data.address.country,
-            });
-          });
-        });
-      },
-      (error) => {
-        console.log(error);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0,
-      }
-    );
   };
 
   return (
@@ -162,7 +134,9 @@ export default function CreatePost({
               <Button
                 variant="icon"
                 title="Pin location to post"
-                onClick={handleAddLocation}
+                onClick={() => {
+                  handleFetchLocation(setLocation);
+                }}
               >
                 <MapPin className="h-5 w-5 text-neutral-500" />
               </Button>
