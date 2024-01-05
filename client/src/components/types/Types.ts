@@ -62,8 +62,24 @@ export interface ReplyToPostProps {
 
 // Props for the Followers List component
 export interface FollowersListProps {
-  username: string;
-  avatar: string;
   name: string;
-  description: string;
+  username: string;
+  followers: {
+    username: string;
+    avatar: string;
+    name: string;
+    description: string;
+  }[];
+}
+
+// Props for the Follows List component
+export interface FollowsListProps {
+  name: string;
+  username: string;
+  follows: {
+    username: string;
+    avatar: string;
+    name: string;
+    description: string;
+  }[];
 }
