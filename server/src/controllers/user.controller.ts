@@ -54,6 +54,23 @@ export const fetchUser = async (req: Request, res: Response) => {
                 replies: true,
               },
             },
+            replyTo: {
+              select: {
+                id: true,
+                createdAt: true,
+                content: true,
+                user: {
+                  select: {
+                    username: true,
+                    avatar: true,
+                    name: true,
+                  },
+                },
+              },
+            },
+          },
+          orderBy: {
+            createdAt: "desc",
           },
         },
         _count: {
@@ -78,7 +95,7 @@ export const fetchUser = async (req: Request, res: Response) => {
 
 export const followUser = async (req: Request, res: Response) => {
   try {
-    const { username } = req.body;
+    const username = req.params.id;
 
     const user = jwt.verify(req.cookies.session, JWT_SECRET) as {
       email: string;
@@ -90,9 +107,7 @@ export const followUser = async (req: Request, res: Response) => {
       throw new Error("You can't follow yourself");
     }
 
-    // find if user.email and username are connected
-
-    const isFollowing = await prisma.user
+    await prisma.user
       .findUniqueOrThrow({
         where: {
           email: user.email,
@@ -142,6 +157,32 @@ export const followUser = async (req: Request, res: Response) => {
       });
 
     return res.status(200).json({ success: true });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false });
+  }
+};
+
+export const fetchUserFollowers = async (req: Request, res: Response) => {
+  try {
+    const { username } = req.params;
+
+    const followers = await prisma.user.findMany({
+      where: {
+        follows: {
+          some: {
+            username: username,
+          },
+        },
+      },
+      select: {
+        username: true,
+        avatar: true,
+        name: true,
+        description: true,
+      },
+    });
+    return res.status(200).json({ success: true, followers });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ success: false });

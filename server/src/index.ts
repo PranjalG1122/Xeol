@@ -26,7 +26,7 @@ app.use("/post", postRouter);
 app.use("/user", userRouter);
 
 app.get("/ping", (req: Request, res: Response) => {
-  return res.status(200).json({ success: true, message: "Pong!" });
+  return res.status(200).json({ success: true });
 });
 
 app.listen(5000, () => {

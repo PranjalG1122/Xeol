@@ -1,5 +1,5 @@
 import express from "express";
-import { checkSession, getUserDetails } from "../controllers/session";
+import { checkSession, getUserDetails } from "../controllers/session.controller";
 const router = express.Router();
 
 router.get("/", checkSession);

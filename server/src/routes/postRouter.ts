@@ -2,14 +2,14 @@ import express from "express";
 import {
   createNewPost,
   fetchPost,
+  getPosts,
   likePost,
-  replyPost,
-} from "../controllers/post";
+} from "../controllers/post.controller";
 const router = express.Router();
 
 router.post("/newpost", createNewPost);
-router.post("/reply", replyPost);
 router.post("/like", likePost);
 router.get("/:id", fetchPost);
+router.post("/getposts", getPosts);
 
 export default router;

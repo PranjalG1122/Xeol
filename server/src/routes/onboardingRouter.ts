@@ -1,5 +1,5 @@
 import express from "express";
-import { updateOnboarding, verifyUsername } from "../controllers/onboarding";
+import { updateOnboarding, verifyUsername } from "../controllers/onboarding.controller";
 const router = express.Router();
 import multer from "multer";
 

@@ -1,9 +1,14 @@
 import express from "express";
-import { fetchUser, followUser } from "../controllers/user";
+import {
+  fetchUser,
+  fetchUserFollowers,
+  followUser,
+} from "../controllers/user.controller";
 
 const router = express.Router();
 
 router.get("/:id", fetchUser);
-router.post("/follow", followUser);
+router.get("/follow/:id", followUser);
+router.get("/:username/followers", fetchUserFollowers);
 
 export default router;

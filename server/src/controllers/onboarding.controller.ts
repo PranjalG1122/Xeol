@@ -40,6 +40,9 @@ export const updateOnboarding = async (req: Request, res: Response) => {
     if (!name || !username || !description)
       return res.status(400).json({ success: false });
 
+    // Conver to one query instead of two (idiot) and use upsert so it can also
+    // be used for updating the user's profile (idiot x2)
+
     if (req.file) {
       const blob = new Blob([req.file.buffer], { type: "image/png" });
 
@@ -61,7 +64,6 @@ export const updateOnboarding = async (req: Request, res: Response) => {
         },
       });
 
-      console.log(returnBlob.url);
       return res.status(200).json({ success: true });
     }
 
@@ -80,7 +82,7 @@ export const updateOnboarding = async (req: Request, res: Response) => {
 
     return res.status(200).json({ success: true });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res.status(501).json({ success: false });
   }
 };

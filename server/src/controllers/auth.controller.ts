@@ -22,21 +22,22 @@ export const enterEmail = async (req: Request, res: Response) => {
       to: req.body.email,
       from: "xeolpost@gmail.com",
       subject: "Verify your email",
-      text: "and easy to do anywhere, even with Node.js",
+      text: "Verify your email",
       html: CLIENT_URL + "/verify/" + verificationToken,
     };
     sgMail
       .send(msg)
       .then(() => {
         console.log("Email sent");
-    })
+      })
       .catch((error) => {
         console.error(error);
       });
-    return res.status(200).json({ success: true, message: "Email sent" });
+
+    return res.status(200).json({ success: true });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ success: false, message: "Error" });
+    return res.status(500).json({ success: false });
   }
 };
 
@@ -44,11 +45,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
   try {
     const verificationToken = req.params.id;
 
-    if (!verificationToken)
-      return res.status(400).json({
-        success: false,
-        message: "Error verifying link. Please try again.",
-      });
+    if (!verificationToken) return res.status(400).json({ success: false });
 
     const userId = jwt.verify(verificationToken, JWT_SECRET) as {
       email: string;
@@ -57,7 +54,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
     };
 
     if (Date.now() >= userId.exp * 1000)
-      return res.status(401).json({ success: false, message: "Token Expired" });
+      return res.status(401).json({ success: false });
 
     const user = await prisma.user.upsert({
       where: {
@@ -76,12 +73,11 @@ export const verifyEmail = async (req: Request, res: Response) => {
     return res
       .cookie("session", sessionToken, COOKIE_OPTIONS)
       .status(200)
-      .json({ success: true, message: "The link was successfully Verified!" });
+      .json({ success: true });
   } catch (err) {
     console.error(err);
     return res.status(500).json({
       success: false,
-      message: "Error verifying link. Please try again.",
     });
   }
 };
