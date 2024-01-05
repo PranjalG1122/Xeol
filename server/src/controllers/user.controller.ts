@@ -167,22 +167,54 @@ export const fetchUserFollowers = async (req: Request, res: Response) => {
   try {
     const { username } = req.params;
 
-    const followers = await prisma.user.findMany({
+    const followers = await prisma.user.findUniqueOrThrow({
       where: {
-        follows: {
-          some: {
-            username: username,
+        username: username,
+      },
+      select: {
+        name: true,
+        username: true,
+        followers: {
+          select: {
+            username: true,
+            avatar: true,
+            name: true,
+            description: true,
           },
         },
       },
+    });
+
+    return res.status(200).json({ success: true, followers });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false });
+  }
+};
+
+export const fetchUserFollows = async (req: Request, res: Response) => {
+  try {
+    const { username } = req.params;
+
+    const follows = await prisma.user.findUniqueOrThrow({
+      where: {
+        username: username,
+      },
       select: {
-        username: true,
-        avatar: true,
         name: true,
-        description: true,
+        username: true,
+        follows: {
+          select: {
+            username: true,
+            avatar: true,
+            name: true,
+            description: true,
+          },
+        },
       },
     });
-    return res.status(200).json({ success: true, followers });
+
+    return res.status(200).json({ success: true, follows });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ success: false });
