@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Container from "../../components/Container";
-import fetchUserDetailsLocal from "../../lib/fetchUserDetailsLocal";
 import { FollowersListProps } from "../../components/types/Types";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button } from "../../components/Button";
@@ -15,25 +14,22 @@ export default function Followers() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userDetails = fetchUserDetailsLocal();
-    if (userDetails) {
-      fetch(
-        import.meta.env.VITE_SERVER_LINK +
-          "/user/" +
-          params.username +
-          "/followers",
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      )
-        .then((res) => res.json())
-        .then((data: { success: boolean; followers: FollowersListProps }) => {
-          if (data.success) return setFollowersList(data.followers);
-          // add error gate
-          return;
-        });
-    }
+    fetch(
+      import.meta.env.VITE_SERVER_LINK +
+        "/user/" +
+        params.username +
+        "/followers",
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    )
+      .then((res) => res.json())
+      .then((data: { success: boolean; followers: FollowersListProps }) => {
+        if (data.success) return setFollowersList(data.followers);
+        // add error gate
+        return;
+      });
   }, []);
   return (
     <Container>
