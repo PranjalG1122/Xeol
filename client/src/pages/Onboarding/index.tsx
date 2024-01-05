@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Button, variants } from "../../components/Button";
 import Container from "../../components/Container";
+import { useNavigate } from "react-router-dom";
 
 type userDetailsProps = {
   name: string;
@@ -10,6 +11,7 @@ type userDetailsProps = {
 
 export default function Onboarding() {
   const formRef = useRef<HTMLFormElement>(null);
+  const navigate = useNavigate();
 
   const [userDetails, setUserDetails] = useState<userDetailsProps>({
     name: "",
@@ -67,7 +69,7 @@ export default function Onboarding() {
       .then((res) => res.json())
       .then((data: { success: boolean }) => {
         if (data.success) {
-          window.location.href = "/home";
+          navigate("/home");
         } else {
           setSubmitLoading(false);
           alert("Something went wrong");
@@ -94,9 +96,11 @@ export default function Onboarding() {
           <div className="flex flex-col items-start gap-2">
             <label className="text-base font-medium">Upload Avatar</label>
             <input
-              className={variants({
-                variant: "inputFile",
-              }) + "sha"}
+              className={
+                variants({
+                  variant: "inputFile",
+                }) + "sha"
+              }
               id="avatar"
               name="avatar"
               type="file"
@@ -119,6 +123,7 @@ export default function Onboarding() {
             className={variants({
               variant: "input",
             })}
+            maxLength={64}
             name="name"
             onChange={(e) =>
               setUserDetails({ ...userDetails, name: e.target.value })
@@ -144,6 +149,7 @@ export default function Onboarding() {
             className={variants({
               variant: "input",
             })}
+            maxLength={32}
             name="username"
             onChange={(e) =>
               setUserDetails({ ...userDetails, username: e.target.value })
@@ -155,7 +161,7 @@ export default function Onboarding() {
           <p className="text-base font-semibold">Description</p>
           <textarea
             placeholder="A short description about yourself"
-            maxLength={256}
+            maxLength={128}
             rows={4}
             className={
               variants({

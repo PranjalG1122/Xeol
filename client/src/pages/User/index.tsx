@@ -1,15 +1,18 @@
-import { useContext, useEffect, useState } from "react";
-import Container, { UserDetailsContext } from "../../components/Container";
-import { useParams } from "react-router-dom";
-import { Calendar, MapPin } from "react-feather";
+import { useEffect, useState } from "react";
+import Container from "../../components/Container";
+import { useNavigate, useParams } from "react-router-dom";
+import { Calendar } from "react-feather";
 import { PostProps, UserDetailsPageProps } from "../../components/types/Types";
-import PostComponent from "../../components/Post";
+import PostComponent from "../../components/PostComponent";
+import fetchUserDetailsLocal from "../../lib/fetchUserDetailsLocal";
+import { Button } from "../../components/Button";
 
 export default function User() {
   const { username } = useParams<{ username: string }>();
   const [userDetails, setUserDetails] = useState<UserDetailsPageProps | null>(
     null
   );
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(import.meta.env.VITE_SERVER_LINK + "/user/" + username, {
@@ -29,7 +32,7 @@ export default function User() {
       "Xeol";
   }, [userDetails]);
 
-  const userDetailsContext = useContext(UserDetailsContext);
+  const userDetailsCurrent = fetchUserDetailsLocal();
 
   return (
     <Container>
@@ -41,16 +44,12 @@ export default function User() {
               alt="ava"
               className="lg:h-36 lg:w-36 h-16 w-16 rounded-full"
             />
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 items-start">
               <h1 className="lg:text-2xl text-xl font-bold">
                 {userDetails.name}
               </h1>
-              <div className="flex flex-row items-center gap-4 text-neutral-500 text-sm">
+              <div className="flex flex-row items-center gap-4 text-neutral-500 text-sm w-full">
                 <p>@{userDetails.username}</p>
-                <p className="flex flex-row items-center gap-1">
-                  <MapPin className="h-4 w-4" />
-                  Noida, India
-                </p>
                 <p className="flex flex-row items-center gap-1">
                   <Calendar className="h-4 w-4" />
                   {new Date(userDetails.createdAt).toLocaleDateString("us-en", {
@@ -59,15 +58,26 @@ export default function User() {
                   })}
                 </p>
               </div>
+              <p className="text-sm">{userDetails.description}</p>
               <div className="flex flex-row items-center gap-4 text-sm">
-                <p>
+                <button
+                  className="hover:underline underline-offset-2"
+                  onClick={() => {
+                    navigate("/u/" + userDetails.username + "/followers");
+                  }}
+                >
                   {userDetails._count.followers}{" "}
                   <span className="text-neutral-500">Followers</span>
-                </p>
-                <p>
+                </button>
+                <button
+                  className="hover:underline underline-offset-2"
+                  onClick={() => {
+                    navigate("/u/" + userDetails.username + "/follows");
+                  }}
+                >
                   {userDetails._count.follows}{" "}
                   <span className="text-neutral-500">Following</span>
-                </p>
+                </button>
                 <p>
                   {userDetails._count.posts}{" "}
                   <span className="text-neutral-500">
@@ -75,14 +85,14 @@ export default function User() {
                   </span>
                 </p>
               </div>
-              {(userDetailsContext &&
-                userDetailsContext.username === userDetails.username && (
-                  <button>Update</button>
-                )) || <button>Follow</button>}
+              {(userDetailsCurrent &&
+                userDetailsCurrent.username !== userDetails.username && (
+                  <Button>Follow</Button>
+                )) || <Button variant="outline">Edit Profile</Button>}
             </div>
           </div>
           <h1 className="font-semibold lg:text-xl text-lg">Posts</h1>
-          <div className="flex flex-col items-center w-full gap-4">
+          <div className="flex flex-col items-center w-full lg:gap-4 gap-2">
             {userDetails.posts &&
               userDetails.posts.map((post: PostProps, index) => {
                 return <PostComponent key={index} post={post} />;
