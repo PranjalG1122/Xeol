@@ -1,35 +1,29 @@
-export const handleFetchLocation = (
-  setLocation: React.Dispatch<
-    React.SetStateAction<{
-      city: string;
-      country: string;
-    } | null>
-  >
-): void => {
+export const handleFetchLocation = new Promise<{
+  city: string;
+  country: string;
+} | null>((resolve, reject) => {
   navigator.geolocation.getCurrentPosition(
     (position) => {
       if (!position) {
-        setLocation(null);
-        return;
+        reject(null);
       }
       fetch(
         import.meta.env.VITE_LOCATION_API_LINK +
           `/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&format=json&addressdetails=1&zoom=10`
       ).then((res) => {
         res.json().then((data) => {
-          if (data)
-            return setLocation({
+          data &&
+            resolve({
               city: data.address.city,
               country: data.address.country,
             });
-          return setLocation(null);
+          reject(null);
         });
       });
     },
     (error) => {
       console.log(error);
-      setLocation(null);
-      return;
+      reject(null);
     },
     {
       enableHighAccuracy: true,
@@ -37,4 +31,4 @@ export const handleFetchLocation = (
       maximumAge: 0,
     }
   );
-};
+});
