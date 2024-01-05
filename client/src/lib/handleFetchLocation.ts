@@ -21,8 +21,7 @@ export const handleFetchLocation = new Promise<{
         });
       });
     },
-    (error) => {
-      console.log(error);
+    () => {
       reject(null);
     },
     {
