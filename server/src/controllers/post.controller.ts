@@ -242,9 +242,11 @@ export const getPosts = async (req: Request, res: Response) => {
     const {
       city,
       country,
+      tag,
     }: {
       city: string | null;
       country: string | null;
+      tag: string | null;
     } = req.body;
 
     const user = jwt.verify(req.cookies.session, JWT_SECRET) as {
@@ -253,62 +255,74 @@ export const getPosts = async (req: Request, res: Response) => {
       iat: number;
     };
 
-    const followsPosts = await prisma.post.findMany({
-      where: {
-        user: {
-          followers: {
-            some: {
-              email: user.email,
-            },
-          },
-        },
-      },
-      select: {
-        id: true,
-        content: true,
-        createdAt: true,
-        city: true,
-        country: true,
-        user: {
-          select: {
-            username: true,
-            avatar: true,
-            name: true,
-          },
-        },
-        likes: {
-          where: {
-            email: user.email,
-          },
-          select: {
-            email: true,
-          },
-        },
-        replyTo: {
-          select: {
-            id: true,
-            content: true,
-            createdAt: true,
-            user: {
-              select: {
-                username: true,
-                avatar: true,
-                name: true,
+    const followsPosts = await prisma.post
+      .findMany({
+        where: {
+          user: {
+            followers: {
+              some: {
+                email: user.email,
               },
             },
           },
+          city: city,
+          country: country,
         },
-        _count: {
-          select: {
-            likes: true,
-            replies: true,
+        select: {
+          id: true,
+          content: true,
+          createdAt: true,
+          city: true,
+          country: true,
+          tags: true,
+          user: {
+            select: {
+              username: true,
+              avatar: true,
+              name: true,
+            },
+          },
+          likes: {
+            where: {
+              email: user.email,
+            },
+            select: {
+              email: true,
+            },
+          },
+          replyTo: {
+            select: {
+              id: true,
+              content: true,
+              createdAt: true,
+              user: {
+                select: {
+                  username: true,
+                  avatar: true,
+                  name: true,
+                },
+              },
+            },
+          },
+          _count: {
+            select: {
+              likes: true,
+              replies: true,
+            },
           },
         },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+        orderBy: {
+          createdAt: "desc",
+        },
+      })
+      .then((posts) => {
+        return posts.filter((post) => {
+          if (tag) {
+            return post.tags.some((t) => t.name === tag);
+          }
+          return true;
+        });
+      });
 
     return res.status(200).json({ success: true, follows: followsPosts });
   } catch (err) {

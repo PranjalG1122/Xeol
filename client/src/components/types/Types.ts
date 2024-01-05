@@ -35,6 +35,11 @@ export interface PostProps {
   content: string;
   city: string | null;
   country: string | null;
+  tags:
+    | {
+        name: string;
+      }[]
+    | null;
   likes: {
     email: string;
   }[];
