@@ -3,18 +3,19 @@ import Container from "../../components/Container";
 import PostComponent from "../../components/PostComponent";
 import { PostProps } from "../../components/types/Types";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { handleFetchLocation } from "../../lib/handleFetchLocation";
 
 export default function Home() {
   const navigate = useNavigate();
-
   document.title = "Home / Xeol";
   const url = new URL(window.location.href);
   const city = url.searchParams.getAll("city");
   const country = url.searchParams.getAll("country");
+  const tag = url.searchParams.getAll("tag");
 
-  const location = useLocation();
+  const currentURL = useLocation();
 
-  const [posts, setPosts] = useState<PostProps[] | null>();
+  const [posts, setPosts] = useState<PostProps[] | null>(null);
 
   useEffect(() => {
     fetch(import.meta.env.VITE_SERVER_LINK + "/post/getposts", {
@@ -26,6 +27,7 @@ export default function Home() {
       body: JSON.stringify({
         city: city[0],
         country: country[0],
+        tag: tag[0],
       }),
     })
       .then((res) => res.json())
@@ -33,10 +35,17 @@ export default function Home() {
         console.log(data);
         setPosts(data.follows);
       });
-  }, []);
+  }, [currentURL.search]);
 
   const handleNavigateToMyCity = () => {
-    navigate("/home?city=" + city + "&country=" + country);
+    handleFetchLocation.then((location) => {
+      navigate(
+        currentURL.pathname +
+          (location
+            ? "?&city=" + location.city + "&country=" + location.country
+            : "")
+      );
+    });
   };
 
   return (
@@ -47,7 +56,7 @@ export default function Home() {
             to="/home"
             className={
               "font-bold " +
-              (!location.search ? "text-orange-500" : "text-neutral-500")
+              (!currentURL.search ? "text-orange-500" : "text-neutral-500")
             }
           >
             Following
@@ -55,7 +64,9 @@ export default function Home() {
           <button
             className={
               "font-semibold " +
-              (location.search ? "text-orange-500" : "text-neutral-500")
+              (currentURL.search.includes("city")
+                ? "text-orange-500"
+                : "text-neutral-500")
             }
             onClick={handleNavigateToMyCity}
           >
@@ -66,7 +77,9 @@ export default function Home() {
         <div className="w-full flex flex-col items-center gap-2">
           {posts &&
             posts.map((post: PostProps, index: number) => {
-              return <PostComponent key={index} post={post} />;
+              return (
+                <PostComponent key={index} post={post} setPosts={setPosts} />
+              );
             })}
         </div>
       </section>
