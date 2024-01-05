@@ -1,11 +1,11 @@
 import { Sun, Moon, Plus } from "react-feather";
 import { Button } from "./Button";
 import { Link } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useEffect } from "react";
 import { SessionDecode } from "../lib/SessionDecode";
 import CreatePost from "./CreatePost";
-import { UserDetailsContext } from "./Container";
+import fetchUserDetailsLocal from "../lib/fetchUserDetailsLocal";
 
 const restrictedPages = ["/", "/*", "/onboarding"];
 
@@ -25,9 +25,10 @@ export default function Navbar() {
     }
   }, [isDarkTheme]);
 
-  const userDetails = useContext(UserDetailsContext);
+  const userDetails = fetchUserDetailsLocal();
+
   return (
-    <nav className="w-full flex flex-row items-center justify-between lg:px-20 lg:py-4 py-2 sticky top-0 bg-white dark:bg-neutral-950">
+    <nav className="w-full flex flex-row items-center justify-between lg:px-20 lg:py-4 py-2 sticky top-0  backdrop-blur-xl">
       <Link to="/">
         <img
           src={isDarkTheme ? "/logo_dark_theme.png" : "/logo_light_theme.png"}
@@ -53,7 +54,7 @@ export default function Navbar() {
             <img
               src={userDetails?.avatar}
               alt="alt"
-              className="lg:h-8 lg:w-8 h-6 w-6 rounded-full"
+              className="h-8 w-8 rounded-full"
             />
           </Link>
         )}
@@ -66,7 +67,9 @@ export default function Navbar() {
           {isDarkTheme ? <Sun /> : <Moon />}
         </Button>
       </div>
-      {newPostInView && <CreatePost setNewPostInView={setNewPostInView} />}
+      {newPostInView && (
+        <CreatePost setNewPostInView={setNewPostInView} post={null} />
+      )}
     </nav>
   );
 }
