@@ -21,7 +21,7 @@ export default function User() {
     })
       .then((res) => res.json())
       .then((data: { success: boolean; userDetails: UserDetailsPageProps }) => {
-        setUserDetails(data.userDetails);
+        return setUserDetails(data.userDetails);
       });
   }, [username]);
 
@@ -92,7 +92,7 @@ export default function User() {
             </div>
           </div>
           <h1 className="font-semibold lg:text-xl text-lg">Posts</h1>
-          <div className="flex flex-col items-center w-full lg:gap-4 gap-2">
+          <div className="flex flex-col items-center w-full gap-2">
             {userDetails.posts &&
               userDetails.posts.map((post: PostProps, index) => {
                 return (
