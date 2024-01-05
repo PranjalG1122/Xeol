@@ -13,12 +13,39 @@ import CreatePost from "./CreatePost";
 import ReplyToPostComponent from "./ReplyToPostComponent";
 import Content from "./Content";
 
-export default function PostComponent({ post }: { post: PostProps }) {
+export default function PostComponent({
+  post,
+  setPosts,
+}: {
+  post: PostProps;
+  setPosts: React.Dispatch<React.SetStateAction<PostProps[] | null>> | null;
+}) {
+  document.title = `${post.user.name}: "${post.content}"`;
   const [newPostInView, setNewPostInView] = useState<boolean>(false);
   const [loadingSetLike, setLoadingSetLike] = useState<boolean>(false);
+  const [postLiked, setPostLiked] = useState<boolean>(post.likes.length > 0);
 
   const handleLike = async () => {
     setLoadingSetLike(true);
+    setPostLiked(!postLiked);
+    setPosts &&
+      setPosts((prev) => {
+        if (prev) {
+          return prev.map((p) => {
+            if (p.id === post.id) {
+              return {
+                ...p,
+                _count: {
+                  ...p._count,
+                  likes: postLiked ? p._count.likes - 1 : p._count.likes + 1,
+                },
+                likes: postLiked ? [] : [{ email: "" }],
+              };
+            } else return p;
+          });
+        }
+        return null;
+      });
     await fetch(import.meta.env.VITE_SERVER_LINK + "/post/like", {
       method: "POST",
       headers: {
@@ -39,10 +66,6 @@ export default function PostComponent({ post }: { post: PostProps }) {
     <article
       title="Post"
       className="flex flex-row items-start gap-4 lg:p-4 p-2 rounded-md w-full bg-neutral-100 dark:bg-neutral-900 text-sm"
-      // onClick={(e) => {
-      //   e.stopPropagation();
-      //   window.location.href = "/post/" + post.id;
-      // }}
     >
       <Link to={"/u/" + post.user.username} className="h-10 w-10">
         <img
