@@ -15,6 +15,8 @@ import Onboarding from "./pages/Onboarding";
 import Post from "./pages/Post";
 import { SessionVerifyProps } from "./components/types/Types";
 import User from "./pages/User";
+import Followers from "./pages/User/followers";
+import Follows from "./pages/User/follows";
 
 const router = createBrowserRouter([
   {
@@ -59,6 +61,32 @@ const router = createBrowserRouter([
   {
     path: "/u/:username",
     element: <User />,
+    loader: async () => {
+      return SessionVerify().then((data: SessionVerifyProps) => {
+        return data.verified
+          ? data.onboarded
+            ? null
+            : redirect("/onboarding")
+          : redirect("/");
+      });
+    },
+  },
+  {
+    path: "/u/:username/followers",
+    element: <Followers />,
+    loader: async () => {
+      return SessionVerify().then((data: SessionVerifyProps) => {
+        return data.verified
+          ? data.onboarded
+            ? null
+            : redirect("/onboarding")
+          : redirect("/");
+      });
+    },
+  },
+  {
+    path: "/u/:username/follows",
+    element: <Follows />,
     loader: async () => {
       return SessionVerify().then((data: SessionVerifyProps) => {
         return data.verified
