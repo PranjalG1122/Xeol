@@ -75,7 +75,7 @@ export default function CreatePost({
         onClick={(e) => {
           e.stopPropagation();
         }}
-        className="flex flex-col items-start justify-center w-full max-w-xl p-4 rounded gap-6 bg-white dark:bg-neutral-900"
+        className="flex flex-col items-start justify-center w-full max-w-xl lg:p-4 p-2 rounded gap-6 bg-white dark:bg-neutral-900"
       >
         <div className="w-full flex flex-row items-center justify-between h-full">
           <h1 className="font-medium lg:text-xl text-lg">Post</h1>
