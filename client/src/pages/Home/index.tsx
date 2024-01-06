@@ -78,7 +78,7 @@ export default function Home() {
           {posts &&
             posts.map((post: PostProps, index: number) => {
               return (
-                <PostComponent key={index} post={post} setPosts={setPosts} />
+                <PostComponent key={index} post={post} />
               );
             })}
         </div>

@@ -27,11 +27,14 @@ export default function Post() {
       .then((res) => res.json())
       .then(
         (data: { success: boolean; post: PostProps; replies: PostProps[] }) => {
-          data.success &&
+          document.title = `${data.post.user.name}: "${data.post.content}"`;
+          return (
+            data.success &&
             setPostDetails({
               post: data.post,
               replies: data.replies,
-            });
+            })
+          );
         }
       );
   }, [id]);
@@ -41,7 +44,7 @@ export default function Post() {
       {postDetails && (
         <div className="flex flex-col items-start gap-2 w-full max-w-3xl">
           <h1 className="lg:text-2xl font-medium text-xl">Post</h1>
-          {<PostComponent post={postDetails.post} setPosts={null} />}
+          {<PostComponent post={postDetails.post} />}
           <h1 className="lg:text-xl font-medium text-lg">Replies</h1>
           <article className="flex flex-row items-start gap-4 lg:p-4 p-2 rounded-sm w-full bg-neutral-100 dark:bg-neutral-900 text-sm">
             <Link to="/" className="h-10 w-10">
@@ -63,9 +66,7 @@ export default function Post() {
           </article>
           <div className="flex flex-col items-center gap-2 w-full">
             {postDetails.replies.map((reply: PostProps) => {
-              return (
-                <PostComponent key={reply.id} post={reply} setPosts={null} />
-              );
+              return <PostComponent key={reply.id} post={reply} />;
             })}
           </div>
           {newPostInView && (

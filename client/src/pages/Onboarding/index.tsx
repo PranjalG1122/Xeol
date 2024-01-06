@@ -89,7 +89,7 @@ export default function Onboarding() {
         <div className="flex flex-row items-center gap-4">
           <img
             src={objectURL ? objectURL : "/default.png"}
-            className="h-20 w-20 rounded-full"
+            className="lg:h-20 h-14 lg:w-20 w-14 rounded-full"
             alt="avatar preview"
           />
 
@@ -99,7 +99,7 @@ export default function Onboarding() {
               className={
                 variants({
                   variant: "inputFile",
-                }) + "sha"
+                })
               }
               id="avatar"
               name="avatar"
