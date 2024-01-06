@@ -1,10 +1,4 @@
-import {
-  ExternalLink,
-  Heart,
-  MessageSquare,
-  Share2,
-  UserPlus,
-} from "react-feather";
+import { ExternalLink, MessageSquare, Share2, UserPlus } from "react-feather";
 import { PostProps } from "./types/Types";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -13,42 +7,20 @@ import CreatePost from "./CreatePost";
 import ReplyToPostComponent from "./ReplyToPostComponent";
 import Content from "./Content";
 import fetchUserDetailsLocal from "../lib/fetchUserDetailsLocal";
+import Heart from "./Heart";
 
-export default function PostComponent({
-  post,
-  setPosts,
-}: {
-  post: PostProps;
-  setPosts: React.Dispatch<React.SetStateAction<PostProps[] | null>> | null;
-}) {
-  document.title = `${post.user.name}: "${post.content}"`;
+export default function PostComponent({ post }: { post: PostProps }) {
   const [newPostInView, setNewPostInView] = useState<boolean>(false);
   const [loadingSetLike, setLoadingSetLike] = useState<boolean>(false);
   const [postLiked, setPostLiked] = useState<boolean>(post.likes.length > 0);
+  const [likeCount, setLikeCount] = useState<number>(post._count.likes);
 
   const userDetails = fetchUserDetailsLocal();
 
   const handleLike = async () => {
     setLoadingSetLike(true);
     setPostLiked(!postLiked);
-    setPosts &&
-      setPosts((prev) => {
-        if (prev) {
-          return prev.map((p) => {
-            if (p.id === post.id) {
-              return {
-                ...p,
-                _count: {
-                  ...p._count,
-                  likes: postLiked ? p._count.likes - 1 : p._count.likes + 1,
-                },
-                likes: postLiked ? [] : [{ email: "" }],
-              };
-            } else return p;
-          });
-        }
-        return null;
-      });
+    setLikeCount(postLiked ? likeCount - 1 : likeCount + 1);
     await fetch(import.meta.env.VITE_SERVER_LINK + "/post/like", {
       method: "POST",
       headers: {
@@ -134,17 +106,14 @@ export default function PostComponent({
           </button>
           <button
             title="Like"
-            className={
-              "flex flex-row items-center gap-1 hover:text-pink-500 " +
-              (post.likes.length > 0 ? "text-pink-500" : "")
-            }
+            className={"flex flex-row items-center gap-1"}
             onClick={() => {
               handleLike();
             }}
             disabled={loadingSetLike}
           >
-            <Heart className="h-4 w-4" />
-            <p>{post._count.likes}</p>
+            <Heart active={postLiked} className="h-4 w-4" />
+            <p className={postLiked ? "text-pink-500" : ""}>{likeCount}</p>
           </button>
           <button title="Share">
             <Share2 className="h-4 w-4 hover:text-blue-500" />
