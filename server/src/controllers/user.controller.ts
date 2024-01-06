@@ -185,7 +185,14 @@ export const fetchUserFollowers = async (req: Request, res: Response) => {
       },
     });
 
-    return res.status(200).json({ success: true, followers });
+    return res.status(200).json({
+      success: true,
+      follow: {
+        name: followers.name,
+        username: followers.username,
+        follow: followers.followers,
+      },
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ success: false });
@@ -214,7 +221,14 @@ export const fetchUserFollows = async (req: Request, res: Response) => {
       },
     });
 
-    return res.status(200).json({ success: true, follows });
+    return res.status(200).json({
+      success: true,
+      follow: {
+        name: follows.name,
+        username: follows.username,
+        follow: follows.follows,
+      },
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ success: false });
