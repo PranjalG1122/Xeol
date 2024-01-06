@@ -49,6 +49,14 @@ export default function Navbar() {
               <Plus />
             </Button>
           )}
+        <Button
+          onClick={() => {
+            setIsDarkTheme(!isDarkTheme);
+          }}
+          variant="icon"
+        >
+          {isDarkTheme ? <Sun /> : <Moon />}
+        </Button>
         {!restrictedPages.includes(window.location.pathname) && (
           <Link to={"/u/" + userDetails?.username}>
             <img
@@ -58,14 +66,6 @@ export default function Navbar() {
             />
           </Link>
         )}
-        <Button
-          onClick={() => {
-            setIsDarkTheme(!isDarkTheme);
-          }}
-          variant="icon"
-        >
-          {isDarkTheme ? <Sun /> : <Moon />}
-        </Button>
       </div>
       {newPostInView && (
         <CreatePost setNewPostInView={setNewPostInView} post={null} />
