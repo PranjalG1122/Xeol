@@ -60,26 +60,23 @@ export interface ReplyToPostProps {
   user: UserDetailsProps;
 }
 
-// Props for the Followers List component
-export interface FollowersListProps {
+// Props for the Follows and Followers List component
+export interface FollowListProps {
   name: string;
   username: string;
-  followers: {
-    username: string;
-    avatar: string;
-    name: string;
-    description: string;
-  }[];
+  follow: FollowProps[];
 }
 
-// Props for the Follows List component
-export interface FollowsListProps {
-  name: string;
+export interface FollowProps {
   username: string;
-  follows: {
-    username: string;
-    avatar: string;
-    name: string;
-    description: string;
-  }[];
+  avatar: string;
+  name: string;
+  description: string;
+}
+
+// Props for updating user details on UpdateUser Component
+export interface UpdatedUserDetailsProps {
+  name: string;
+  description: string;
+  avatar: string;
 }
