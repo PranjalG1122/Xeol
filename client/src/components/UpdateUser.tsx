@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { UpdatedUserDetailsProps } from "./types/Types";
 import { Button, variants } from "./Button";
 import { X } from "react-feather";
+import { toast } from "react-toastify";
 
 export default function UpdateUser({
   setUpdateUserInView,
@@ -43,7 +44,13 @@ export default function UpdateUser({
           if (data.success) {
             setLoadingSubmit(false);
             setUpdatedUserDetails(data.newUserDetails);
+            return toast("Updated Successfully!", {
+              className: "bg-green-600 dark:bg-green-600",
+            });
           }
+          return toast("Something went wrong!", {
+            className: "bg-red-600 dark:bg-red-600",
+          });
         }
       );
   };
@@ -56,7 +63,7 @@ export default function UpdateUser({
     });
     setUpdatedUserDetails({
       ...updatedUserDetails,
-      avatar: URL.createObjectURL(URLBlob),
+      avatar: URLBlob.size > 0 ? URL.createObjectURL(URLBlob) : "/default.png",
     });
   };
 
@@ -89,7 +96,7 @@ export default function UpdateUser({
         <div className="flex flex-row items-center gap-4">
           <div className="lg:h-20 h-14 lg:w-20 w-14 rounded-full relative">
             <img
-              src={updatedUserDetails.avatar}
+              src={updatedUserDetails.avatar || "/default.png"}
               className="w-full h-full rounded-full"
               alt="avatar preview"
             />
