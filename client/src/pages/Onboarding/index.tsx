@@ -73,8 +73,8 @@ export default function Onboarding() {
           return navigate("/home");
         } else {
           setSubmitLoading(false);
-          toast("An error has occured!", {
-            className: "bg-red-600 font-medium",
+          toast("Something went wrong!", {
+            className: "bg-red-600 dark:bg-red-600",
           });
           return;
         }

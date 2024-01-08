@@ -6,6 +6,7 @@ import { Button } from "../../components/Button";
 import { ArrowLeft } from "react-feather";
 import FollowingComponent from "../../components/FollowingComponent";
 import LoadingIcon from "../../components/LoadingIcon";
+import { toast } from "react-toastify";
 
 export default function Followers() {
   const [followersList, setFollowersList] = useState<FollowListProps | null>(
@@ -28,8 +29,9 @@ export default function Followers() {
       .then((res) => res.json())
       .then((data: { success: boolean; follow: FollowListProps }) => {
         if (data.success) return setFollowersList(data.follow);
-        // add error gate
-        return;
+        return toast("Something went wrong!", {
+          className: "bg-red-600 dark:bg-red-600",
+        });
       });
   }, []);
   return (

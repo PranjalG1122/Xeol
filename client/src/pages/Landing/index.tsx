@@ -15,7 +15,7 @@ export default function Landing() {
     e.preventDefault();
     if (!VALID_EMAIL.test(email)) {
       return toast("Please enter a valid email", {
-        className: "bg-red-600 font-medium",
+        className: "bg-red-600 dark:bg-red-600",
       });
     }
     setLoadingSubmit(true);

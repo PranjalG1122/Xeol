@@ -124,7 +124,7 @@ export default function PostComponent({ post }: { post: PostProps }) {
               );
               toast("Copied to Clipboard!", {
                 autoClose: 2000,
-                className: "bg-orange-600",
+                className: "bg-orange-600 dark:bg-orange-600",
               });
             }}
           >

@@ -53,12 +53,12 @@ export default function CreatePost({
         if (data.success) {
           toast("Created Post!", {
             className:
-              "bg-green-600 dark:bg-green-600 font-medium dark:font-medium",
+              "bg-green-600 dark:bg-green-600",
           });
           return setNewPostInView(false);
         }
         toast("Error Creating Post", {
-          className: "bg-red-600 font-medium",
+          className: "bg-red-600 dark:bg-red-600",
         });
       });
   };
