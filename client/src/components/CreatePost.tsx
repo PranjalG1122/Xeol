@@ -5,6 +5,7 @@ import { PostProps } from "./types/Types";
 import { Link } from "react-router-dom";
 import fetchUserDetailsLocal from "../lib/fetchUserDetailsLocal";
 import { handleFetchLocation } from "../lib/handleFetchLocation";
+import { toast } from "react-toastify";
 
 export default function CreatePost({
   setNewPostInView,
@@ -50,11 +51,15 @@ export default function CreatePost({
       .then((res) => res.json())
       .then((data: { success: boolean }) => {
         if (data.success) {
+          toast("Created Post!", {
+            className:
+              "bg-green-600 dark:bg-green-600 font-medium dark:font-medium",
+          });
           return setNewPostInView(false);
-          // handle success message :/
         }
-        alert("Erro2");
-        // setMessage(data.message);
+        toast("Error Creating Post", {
+          className: "bg-red-600 font-medium",
+        });
       });
   };
 

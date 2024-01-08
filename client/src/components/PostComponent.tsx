@@ -1,4 +1,4 @@
-import { ExternalLink, MessageSquare, Share2, UserPlus } from "react-feather";
+import { Copy, ExternalLink, MessageSquare, UserPlus } from "react-feather";
 import { PostProps } from "./types/Types";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -8,6 +8,7 @@ import ReplyToPostComponent from "./ReplyToPostComponent";
 import Content from "./Content";
 import fetchUserDetailsLocal from "../lib/fetchUserDetailsLocal";
 import Heart from "./Heart";
+import { toast } from "react-toastify";
 
 export default function PostComponent({ post }: { post: PostProps }) {
   const [newPostInView, setNewPostInView] = useState<boolean>(false);
@@ -115,8 +116,19 @@ export default function PostComponent({ post }: { post: PostProps }) {
             <Heart active={postLiked} className="h-4 w-4" />
             <p className={postLiked ? "text-pink-500" : ""}>{likeCount}</p>
           </button>
-          <button title="Share">
-            <Share2 className="h-4 w-4 hover:text-blue-500" />
+          <button
+            title="Copy Link to Post"
+            onClick={() => {
+              navigator.clipboard.writeText(
+                window.location.origin + "/post/" + post.id
+              );
+              toast("Copied to Clipboard!", {
+                autoClose: 2000,
+                className: "bg-orange-600",
+              });
+            }}
+          >
+            <Copy className="h-4 w-4 hover:text-blue-500" />
           </button>
           {userDetails && post.user.username !== userDetails.username && (
             <button
