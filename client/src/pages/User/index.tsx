@@ -6,12 +6,16 @@ import { PostProps, UserDetailsPageProps } from "../../components/types/Types";
 import PostComponent from "../../components/PostComponent";
 import fetchUserDetailsLocal from "../../lib/fetchUserDetailsLocal";
 import { Button } from "../../components/Button";
+import UpdateUser from "../../components/UpdateUser";
+import LoadingIcon from "../../components/LoadingIcon";
 
 export default function User() {
   const { username } = useParams<{ username: string }>();
   const [userDetails, setUserDetails] = useState<UserDetailsPageProps | null>(
     null
   );
+  const [updateUserInView, setUpdateUserInView] = useState<boolean>(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -88,20 +92,35 @@ export default function User() {
               {(userDetailsCurrent &&
                 userDetailsCurrent.username !== userDetails.username && (
                   <Button>Follow</Button>
-                )) || <Button variant="outline">Edit Profile</Button>}
+                )) || (
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setUpdateUserInView(true);
+                  }}
+                >
+                  Edit Profile
+                </Button>
+              )}
             </div>
           </div>
           <h1 className="font-semibold lg:text-xl text-lg">Posts</h1>
           <div className="flex flex-col items-center w-full gap-2">
             {userDetails.posts &&
               userDetails.posts.map((post: PostProps, index) => {
-                return (
-                  <PostComponent key={index} post={post} setPosts={null} />
-                );
+                return <PostComponent key={index} post={post} />;
               })}
           </div>
         </div>
-      )) || <div>loading</div>}
+      )) || <LoadingIcon />}
+      {updateUserInView && userDetails && (
+        <UpdateUser
+          setUpdateUserInView={setUpdateUserInView}
+          description={userDetails.description}
+          name={userDetails.name}
+          avatar={userDetails.avatar}
+        />
+      )}
     </Container>
   );
 }

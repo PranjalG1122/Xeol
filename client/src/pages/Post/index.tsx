@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { PostProps } from "../../components/types/Types";
 import PostComponent from "../../components/PostComponent";
 import CreatePost from "../../components/CreatePost";
+import fetchUserDetailsLocal from "../../lib/fetchUserDetailsLocal";
+import LoadingIcon from "../../components/LoadingIcon";
 
 export default function Post() {
   const { id } = useParams<{ id: string }>();
@@ -12,6 +14,8 @@ export default function Post() {
     post: PostProps;
     replies: PostProps[];
   } | null>(null);
+
+  const userDetails = fetchUserDetailsLocal();
 
   const [newPostInView, setNewPostInView] = useState<boolean>(false);
   const replyBoxRef = useRef<HTMLTextAreaElement>(null);
@@ -41,14 +45,18 @@ export default function Post() {
 
   return (
     <Container>
-      {postDetails && (
+      {(postDetails && (
         <div className="flex flex-col items-start gap-2 w-full max-w-3xl">
           <h1 className="lg:text-2xl font-medium text-xl">Post</h1>
           {<PostComponent post={postDetails.post} />}
           <h1 className="lg:text-xl font-medium text-lg">Replies</h1>
           <article className="flex flex-row items-start gap-4 lg:p-4 p-2 rounded-sm w-full bg-neutral-100 dark:bg-neutral-900 text-sm">
             <Link to="/" className="h-10 w-10">
-              <img src={"/default.png"} className="rounded-full" alt="n" />
+              <img
+                src={userDetails ? userDetails.avatar : "/default.png"}
+                className="rounded-full"
+                alt="n"
+              />
             </Link>
             <div className="flex flex-col gap-2 w-full">
               <textarea
@@ -76,7 +84,7 @@ export default function Post() {
             />
           )}
         </div>
-      )}
+      )) || <LoadingIcon />}
     </Container>
   );
 }

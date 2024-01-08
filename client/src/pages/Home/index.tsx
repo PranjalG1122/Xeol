@@ -4,6 +4,7 @@ import PostComponent from "../../components/PostComponent";
 import { PostProps } from "../../components/types/Types";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { handleFetchLocation } from "../../lib/handleFetchLocation";
+import LoadingIcon from "../../components/LoadingIcon";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -32,7 +33,6 @@ export default function Home() {
     })
       .then((res) => res.json())
       .then((data: { success: boolean; follows: PostProps[] }) => {
-        console.log(data);
         setPosts(data.follows);
       });
   }, [currentURL.search]);
@@ -75,12 +75,13 @@ export default function Home() {
         </div>
         <h1 className="lg:text-2xl text-xl font-semibold">Posts</h1>
         <div className="w-full flex flex-col items-center gap-2">
-          {posts &&
-            posts.map((post: PostProps, index: number) => {
-              return (
-                <PostComponent key={index} post={post} />
-              );
-            })}
+          {(posts &&
+            ((posts.length > 0 &&
+              posts.map((post: PostProps, index: number) => {
+                return <PostComponent key={index} post={post} />;
+              })) || (
+              <p className="font-medium text-neutral-500">No posts found</p>
+            ))) || <LoadingIcon />}
         </div>
       </section>
     </Container>

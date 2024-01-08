@@ -2,20 +2,21 @@ import { Link } from "react-router-dom";
 import { Button, variants } from "../../components/Button";
 import { useRef, useState } from "react";
 import Container from "../../components/Container";
+import { toast } from "react-toastify";
 
 const VALID_EMAIL = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
 export default function Landing() {
   const [email, setEmail] = useState<string>("");
   const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>("");
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     if (!VALID_EMAIL.test(email)) {
-      setMessage("Please enter a valid email address.");
-      return;
+      return toast("Please enter a valid email", {
+        className: "bg-red-600 font-medium",
+      });
     }
     setLoadingSubmit(true);
     fetch(import.meta.env.VITE_SERVER_LINK + "/auth", {
@@ -29,7 +30,9 @@ export default function Landing() {
       .then((res) => res.json())
       .then((data: { success: boolean }) => {
         if (data.success) {
-          setMessage("Email sent!");
+          toast("Email sent!", {
+            className: "bg-green-600 dark:bg-green-600",
+          });
           setEmail("");
           formRef.current?.reset();
           setLoadingSubmit(false);
@@ -70,18 +73,6 @@ export default function Landing() {
               Submit
             </Button>
           </div>
-          {message ? (
-            <p
-              className={
-                "text-sm font-medium " +
-                (message === "Email sent!" ? "text-green-500" : "text-red-500")
-              }
-            >
-              {message}
-            </p>
-          ) : (
-            <span className="block h-5" />
-          )}
         </form>
         <p className="text-neutral-400">
           By signing up to Xeol, you agree to our{" "}

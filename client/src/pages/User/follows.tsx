@@ -5,6 +5,7 @@ import Container from "../../components/Container";
 import { Button } from "../../components/Button";
 import { ArrowLeft } from "react-feather";
 import FollowingComponent from "../../components/FollowingComponent";
+import LoadingIcon from "../../components/LoadingIcon";
 
 export default function Follows() {
   const [followersList, setFollowersList] = useState<FollowListProps | null>(
@@ -26,7 +27,6 @@ export default function Follows() {
     )
       .then((res) => res.json())
       .then((data: { success: boolean; follow: FollowListProps }) => {
-        console.log(data);
         if (data.success) return setFollowersList(data.follow);
         // add error gate
         return;
@@ -34,7 +34,7 @@ export default function Follows() {
   }, []);
   return (
     <Container>
-      {followersList && (
+      {(followersList && (
         <>
           <div className="flex flex-col items-start gap-4 w-full max-w-3xl text-sm">
             <div className="flex flex-row items-center w-full gap-4">
@@ -77,7 +77,7 @@ export default function Follows() {
             )}
           </div>
         </>
-      )}
+      )) || <LoadingIcon />}
     </Container>
   );
 }
