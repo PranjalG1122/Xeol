@@ -13,7 +13,7 @@ export const variants = cva("lg:text-sm text-xs rounded-sm", {
       inputFile:
         "file:appearance-none file:border-solid file:border file:bg-transparent file:text-black file:dark:text-white file:px-4 file:py-1 file:rounded-sm file:border-neutral-300 file:dark:border-neutral-700 file:shadow-none file:outline-none file:hover:cursor-pointer",
       outline:
-        "focus:outline-none font-medium px-6 py-1 border border-neutral-300 hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800 bg-transparent",
+        "text-black dark:text-white focus:outline-none font-medium px-6 py-1 border border-neutral-300 hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800 bg-transparent",
     },
   },
   defaultVariants: {
