@@ -5,12 +5,12 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import express from "express";
 
-import authRouter from "./routes/authRouter";
-import sessionRouter from "./routes/sessionRouter";
-import onboardingRouter from "./routes/onboardingRouter";
-import postRouter from "./routes/postRouter";
+import authRouter from "../src/routes/authRouter";
+import sessionRouter from "../src/routes/sessionRouter";
+import onboardingRouter from "../src/routes/onboardingRouter";
+import postRouter from "../src/routes/postRouter";
 import { Request, Response } from "express";
-import userRouter from "./routes/userRouter";
+import userRouter from "../src/routes/userRouter";
 
 const app = express();
 
