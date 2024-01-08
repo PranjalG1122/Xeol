@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ReplyToPostProps } from "./types/Types";
 import Content from "./Content";
+import { ExternalLink } from "react-feather";
 
 export default function ReplyToPostComponent({
   reply,
@@ -10,13 +11,18 @@ export default function ReplyToPostComponent({
   return (
     <section
       className="flex flex-col items-start w-full gap-2 p-2 rounded-sm border border-neutral-300 dark:border-neutral-700 text-neutral-500"
-      // onClick={(e) => {
-      //   e.preventDefault();
-      //   window.location.href = "/post/" + reply.id;
-      // }}
       title="Post"
     >
-      <p>Replying to @{reply.user.username}</p>
+      <div className="flex flex-row items-center gap-2">
+        <p>Replying to @{reply.user.username}</p>{" "}
+        <Link
+          to={"/post/" + reply.id}
+          title="Go to Post"
+          className="flex flex-row items-center gap-1 hover:text-neutral-600"
+        >
+          <ExternalLink className="h-4 w-4" />
+        </Link>
+      </div>
       <div className="flex flex-row items-start gap-2 w-full">
         <Link to={"/u/" + reply.user.username} className="h-8 w-8">
           <img
