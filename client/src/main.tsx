@@ -17,6 +17,8 @@ import { SessionVerifyProps } from "./components/types/Types";
 import User from "./pages/User";
 import Followers from "./pages/User/followers";
 import Follows from "./pages/User/follows";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const router = createBrowserRouter([
   {
@@ -131,6 +133,16 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
+    <ToastContainer
+      position="bottom-center"
+      hideProgressBar={true}
+      closeOnClick={true}
+      pauseOnHover={true}
+      draggable={false}
+      progressStyle={undefined}
+      theme="dark"
+      autoClose={2000}
+    />
     <RouterProvider router={router} />
   </React.StrictMode>
 );
