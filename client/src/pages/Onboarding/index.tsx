@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { Button, variants } from "../../components/Button";
 import Container from "../../components/Container";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 type userDetailsProps = {
   name: string;
@@ -69,10 +70,13 @@ export default function Onboarding() {
       .then((res) => res.json())
       .then((data: { success: boolean }) => {
         if (data.success) {
-          navigate("/home");
+          return navigate("/home");
         } else {
           setSubmitLoading(false);
-          alert("Something went wrong");
+          toast("An error has occured!", {
+            className: "bg-red-600 font-medium",
+          });
+          return;
         }
       });
   };
@@ -96,11 +100,9 @@ export default function Onboarding() {
           <div className="flex flex-col items-start gap-2">
             <label className="text-base font-medium">Upload Avatar</label>
             <input
-              className={
-                variants({
-                  variant: "inputFile",
-                })
-              }
+              className={variants({
+                variant: "inputFile",
+              })}
               id="avatar"
               name="avatar"
               type="file"
