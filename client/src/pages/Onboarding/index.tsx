@@ -30,7 +30,7 @@ export default function Onboarding() {
     if (!VALID_USERNAME.test(userDetails.username))
       return setUsernameValidMessage("Username must be 3-25 characters long");
     fetch(
-      `https://${import.meta.env.VERCEL_URL}/api` + "/onboarding/username",
+      `https://${import.meta.env.VITE_VERCEL_URL}/api` + "/onboarding/username",
       {
         method: "POST",
         headers: {
@@ -66,10 +66,13 @@ export default function Onboarding() {
     const formData = new FormData(formRef.current);
 
     setSubmitLoading(true);
-    fetch(`https://${import.meta.env.VERCEL_URL}/api` + "/onboarding/update", {
-      method: "POST",
-      body: formData,
-    })
+    fetch(
+      `https://${import.meta.env.VITE_VERCEL_URL}/api` + "/onboarding/update",
+      {
+        method: "POST",
+        body: formData,
+      }
+    )
       .then((res) => res.json())
       .then((data: { success: boolean }) => {
         if (data.success) {

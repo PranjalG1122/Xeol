@@ -2,7 +2,9 @@ import { toast } from "react-toastify";
 
 export const handleFollow = (username: string) => {
   fetch(
-    `https://${import.meta.env.VERCEL_URL}/api` + "/user/follow/" + username,
+    `https://${import.meta.env.VITE_VERCEL_URL}/api` +
+      "/user/follow/" +
+      username,
     {
       method: "GET",
       credentials: "include",

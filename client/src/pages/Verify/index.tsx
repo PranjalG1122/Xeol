@@ -12,7 +12,7 @@ export default function Verify() {
 
   const { token } = useParams<{ token: string }>();
   useEffect(() => {
-    fetch(`https://${import.meta.env.VERCEL_URL}/api` + "/auth/" + token, {
+    fetch(`https://${import.meta.env.VITE_VERCEL_URL}/api` + "/auth/" + token, {
       method: "GET",
       credentials: "include",
     })

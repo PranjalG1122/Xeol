@@ -28,16 +28,19 @@ export default function PostComponent({ post }: { post: PostProps }) {
     setLoadingSetLike(true);
     setPostLiked(!postLiked);
     setLikeCount(postLiked ? likeCount - 1 : likeCount + 1);
-    await fetch(`https://${import.meta.env.VERCEL_URL}/api` + "/post/like", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        postId: post.id,
-      }),
-    })
+    await fetch(
+      `https://${import.meta.env.VITE_VERCEL_URL}/api` + "/post/like",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          postId: post.id,
+        }),
+      }
+    )
       .then((res) => res.json())
       .then((data: { success: boolean }) => {
         data.success && setLoadingSetLike(false);

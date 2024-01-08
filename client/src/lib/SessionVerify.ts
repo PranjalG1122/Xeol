@@ -3,7 +3,7 @@ import { SessionVerifyProps } from "../components/types/Types";
 export default async function SessionVerify(): Promise<SessionVerifyProps> {
   try {
     return await fetch(
-      `https://${import.meta.env.VERCEL_URL}/api` + "/session",
+      `https://${import.meta.env.VITE_VERCEL_URL}/api` + "/session",
       {
         method: "GET",
         credentials: "include",

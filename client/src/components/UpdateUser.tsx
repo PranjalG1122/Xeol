@@ -31,14 +31,17 @@ export default function UpdateUser({
     e.preventDefault();
     setLoadingSubmit(true);
     console.log(updatedUserDetails);
-    fetch(`https://${import.meta.env.VERCEL_URL}/api` + "/onboarding/update", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(updatedUserDetails),
-    })
+    fetch(
+      `https://${import.meta.env.VITE_VERCEL_URL}/api` + "/onboarding/update",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(updatedUserDetails),
+      }
+    )
       .then((res) => res.json())
       .then(
         (data: {

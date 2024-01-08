@@ -11,10 +11,13 @@ export default function Container({
   className?: string;
 }) {
   useEffect(() => {
-    fetch(`https://${import.meta.env.VERCEL_URL}/api` + "/session/details", {
-      method: "GET",
-      credentials: "include",
-    })
+    fetch(
+      `https://${import.meta.env.VITE_VERCEL_URL}/api` + "/session/details",
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    )
       .then((res) => res.json())
       .then((data: { success: boolean; userDetails: UserDetailsProps }) => {
         if (data.success) {

@@ -36,7 +36,7 @@ export default function CreatePost({
       // setError("Post cannot be 0 characters long");
       return;
     }
-    fetch(`https://${import.meta.env.VERCEL_URL}/api` + "/post/newpost", {
+    fetch(`https://${import.meta.env.VITE_VERCEL_URL}/api` + "/post/newpost", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
