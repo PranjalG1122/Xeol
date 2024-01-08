@@ -25,7 +25,7 @@ app.use("/onboarding", onboardingRouter);
 app.use("/post", postRouter);
 app.use("/user", userRouter);
 
-app.get("/ping", (req: Request, res: Response) => {
+app.get("/", (req: Request, res: Response) => {
   return res.status(200).json({ success: true });
 });
 
