@@ -11,7 +11,7 @@ export default function Container({
   className?: string;
 }) {
   useEffect(() => {
-    fetch(import.meta.env.VITE_SERVER_LINK + "/session/details", {
+    fetch(`https://${import.meta.env.VERCEL_URL}/api` + "/session/details", {
       method: "GET",
       credentials: "include",
     })

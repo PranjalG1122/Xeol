@@ -25,7 +25,7 @@ export default function Post() {
   const replyBoxRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    fetch(import.meta.env.VITE_SERVER_LINK + "/post/" + id, {
+    fetch(`https://${import.meta.env.VERCEL_URL}/api` + "/post/" + id, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

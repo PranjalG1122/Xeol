@@ -28,7 +28,7 @@ export default function PostComponent({ post }: { post: PostProps }) {
     setLoadingSetLike(true);
     setPostLiked(!postLiked);
     setLikeCount(postLiked ? likeCount - 1 : likeCount + 1);
-    await fetch(import.meta.env.VITE_SERVER_LINK + "/post/like", {
+    await fetch(`https://${import.meta.env.VERCEL_URL}/api` + "/post/like", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

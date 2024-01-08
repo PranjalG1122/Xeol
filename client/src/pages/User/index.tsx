@@ -19,7 +19,7 @@ export default function User() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(import.meta.env.VITE_SERVER_LINK + "/user/" + username, {
+    fetch(`https://${import.meta.env.VERCEL_URL}/api` + "/user/" + username, {
       method: "GET",
       credentials: "include",
     })

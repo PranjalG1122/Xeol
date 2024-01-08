@@ -1,10 +1,13 @@
 import { toast } from "react-toastify";
 
 export const handleFollow = (username: string) => {
-  fetch(import.meta.env.VITE_SERVER_LINK + "/user/follow/" + username, {
-    method: "GET",
-    credentials: "include",
-  })
+  fetch(
+    `https://${import.meta.env.VERCEL_URL}/api` + "/user/follow/" + username,
+    {
+      method: "GET",
+      credentials: "include",
+    }
+  )
     .then((res) => res.json())
     .then((data: { success: boolean }) => {
       if (data.success) {

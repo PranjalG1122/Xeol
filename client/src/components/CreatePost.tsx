@@ -36,7 +36,7 @@ export default function CreatePost({
       // setError("Post cannot be 0 characters long");
       return;
     }
-    fetch(import.meta.env.VITE_SERVER_LINK + "/post/newpost", {
+    fetch(`https://${import.meta.env.VERCEL_URL}/api` + "/post/newpost", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -52,8 +52,7 @@ export default function CreatePost({
       .then((data: { success: boolean }) => {
         if (data.success) {
           toast("Created Post!", {
-            className:
-              "bg-green-600 dark:bg-green-600",
+            className: "bg-green-600 dark:bg-green-600",
           });
           return setNewPostInView(false);
         }

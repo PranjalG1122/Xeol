@@ -19,7 +19,7 @@ export default function Home() {
   const [posts, setPosts] = useState<PostProps[] | null>(null);
 
   useEffect(() => {
-    fetch(import.meta.env.VITE_SERVER_LINK + "/post/getposts", {
+    fetch(`https://${import.meta.env.VERCEL_URL}/api` + "/post/getposts", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

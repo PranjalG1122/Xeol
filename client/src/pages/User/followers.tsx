@@ -17,7 +17,7 @@ export default function Followers() {
 
   useEffect(() => {
     fetch(
-      import.meta.env.VITE_SERVER_LINK +
+      `https://${import.meta.env.VERCEL_URL}/api` +
         "/user/" +
         params.username +
         "/followers",

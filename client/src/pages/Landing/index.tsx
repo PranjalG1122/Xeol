@@ -19,7 +19,7 @@ export default function Landing() {
       });
     }
     setLoadingSubmit(true);
-    fetch(import.meta.env.VITE_SERVER_LINK + "/auth", {
+    fetch(`https://${import.meta.env.VERCEL_URL}/api` + "/auth", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

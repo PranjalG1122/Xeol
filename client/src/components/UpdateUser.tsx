@@ -31,7 +31,7 @@ export default function UpdateUser({
     e.preventDefault();
     setLoadingSubmit(true);
     console.log(updatedUserDetails);
-    fetch(import.meta.env.VITE_SERVER_LINK + "/onboarding/update", {
+    fetch(`https://${import.meta.env.VERCEL_URL}/api` + "/onboarding/update", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
