@@ -3,6 +3,7 @@ import { UpdatedUserDetailsProps } from "./types/Types";
 import { Button, variants } from "./Button";
 import { X } from "react-feather";
 import { toast } from "react-toastify";
+import fetchUserDetailsLocal from "../lib/fetchUserDetailsLocal";
 
 export default function UpdateUser({
   setUpdateUserInView,
@@ -15,10 +16,12 @@ export default function UpdateUser({
   avatar: string;
   description: string;
 }) {
+  const userDetails = fetchUserDetailsLocal();
   const [updatedUserDetails, setUpdatedUserDetails] =
     useState<UpdatedUserDetailsProps>({
       name: name,
       avatar: avatar,
+      username: userDetails ? userDetails.username : "",
       description: description,
     });
   const formRef = useRef<HTMLFormElement>(null);
@@ -27,7 +30,8 @@ export default function UpdateUser({
   const handleSubmitUpdatedUserDetails = (e: any) => {
     e.preventDefault();
     setLoadingSubmit(true);
-    fetch(import.meta.env.VITE_SERVER_LINK + "/user/update", {
+    console.log(updatedUserDetails);
+    fetch(import.meta.env.VITE_SERVER_LINK + "/onboarding/update", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -43,7 +47,7 @@ export default function UpdateUser({
         }) => {
           if (data.success) {
             setLoadingSubmit(false);
-            setUpdatedUserDetails(data.newUserDetails);
+            // setUpdatedUserDetails(data.newUserDetails);
             return toast("Updated Successfully!", {
               className: "bg-green-600 dark:bg-green-600",
             });

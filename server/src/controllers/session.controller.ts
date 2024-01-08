@@ -52,6 +52,11 @@ export const getUserDetails = async (req: Request, res: Response) => {
         avatar: true,
         name: true,
         username: true,
+        follows: {
+          select: {
+            username: true,
+          },
+        },
       },
     });
 

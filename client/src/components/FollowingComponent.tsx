@@ -10,6 +10,7 @@ export default function FollowingComponent({
   followDetails: FollowProps;
 }) {
   const userDetails = fetchUserDetailsLocal();
+
   return (
     <li className="flex flex-row items-start gap-2 w-full p-2 border border-neutral-300 dark:border-neutral-700">
       <img
@@ -30,10 +31,15 @@ export default function FollowingComponent({
               @{followDetails.username}
             </p>
           </Link>
-
-          {userDetails && userDetails.username !== followDetails.username && (
-            <Button>Follow</Button>
-          )}
+          {userDetails &&
+            userDetails.username !== followDetails.username &&
+            (userDetails.follows.some(
+              (follow) => follow.username === followDetails.username
+            ) ? (
+              <Button variant="outline">Unfollow</Button>
+            ) : (
+              <Button>Follow</Button>
+            ))}
         </div>
         <Content text={followDetails.description} />
       </div>

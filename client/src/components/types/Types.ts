@@ -10,6 +10,9 @@ export interface UserDetailsProps {
   name: string;
   username: string;
   avatar: string;
+  follows: {
+    username: string;
+  }[];
 }
 
 // Props for details on the user's profile page
@@ -79,4 +82,5 @@ export interface UpdatedUserDetailsProps {
   name: string;
   description: string;
   avatar: string;
+  username: string;
 }

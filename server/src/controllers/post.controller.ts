@@ -62,7 +62,6 @@ export const createNewPost = async (req: Request, res: Response) => {
         if (tags) {
           await Promise.all(
             tags.map((tag: string) => {
-              console.log(tag);
               return prisma.tag.upsert({
                 where: {
                   name: tag,
@@ -161,6 +160,11 @@ export const fetchPost = async (req: Request, res: Response) => {
             username: true,
             avatar: true,
             name: true,
+            followers: {
+              select: {
+                username: true,
+              },
+            },
           },
         },
         likes: {

@@ -1,4 +1,10 @@
-import { Copy, ExternalLink, MessageSquare, UserPlus } from "react-feather";
+import {
+  Copy,
+  ExternalLink,
+  MessageSquare,
+  UserMinus,
+  UserPlus,
+} from "react-feather";
 import { PostProps } from "./types/Types";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -130,18 +136,33 @@ export default function PostComponent({ post }: { post: PostProps }) {
           >
             <Copy className="h-4 w-4 hover:text-blue-500" />
           </button>
-          {userDetails && post.user.username !== userDetails.username && (
-            <button
-              className="flex flex-row items-center gap-1 hover:text-green-500"
-              onClick={() => {
-                handleFollow(post.user.username);
-              }}
-              title="Follow"
-            >
-              <UserPlus className="h-4 w-4" />
-              <p>Follow</p>
-            </button>
-          )}
+          {userDetails &&
+            post.user.username !== userDetails.username &&
+            (userDetails.follows.some(
+              (e) => e.username === post.user.username
+            ) ? (
+              <button
+                className="flex flex-row items-center gap-1 hover:text-red-500"
+                onClick={() => {
+                  handleFollow(post.user.username);
+                }}
+                title="UnFollow"
+              >
+                <UserMinus className="h-4 w-4" />
+                <p>Unfollow</p>
+              </button>
+            ) : (
+              <button
+                className="flex flex-row items-center gap-1 hover:text-green-500"
+                onClick={() => {
+                  handleFollow(post.user.username);
+                }}
+                title="Follow"
+              >
+                <UserPlus className="h-4 w-4" />
+                <p>Follow</p>
+              </button>
+            ))}
           <Link
             to={"/post/" + post.id}
             title="Open Post"
