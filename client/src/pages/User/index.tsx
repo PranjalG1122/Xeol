@@ -19,7 +19,7 @@ export default function User() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(window.location.href + "/api" + "/user/" + username, {
+    fetch(window.location.href + "api" + "/user/" + username, {
       method: "GET",
       credentials: "include",
     })

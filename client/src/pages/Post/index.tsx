@@ -25,7 +25,7 @@ export default function Post() {
   const replyBoxRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    fetch(window.location.href + "/api" + "/post/" + id, {
+    fetch(window.location.href + "api" + "/post/" + id, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

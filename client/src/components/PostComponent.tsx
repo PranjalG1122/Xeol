@@ -28,7 +28,7 @@ export default function PostComponent({ post }: { post: PostProps }) {
     setLoadingSetLike(true);
     setPostLiked(!postLiked);
     setLikeCount(postLiked ? likeCount - 1 : likeCount + 1);
-    await fetch(window.location.href + "/api" + "/post/like", {
+    await fetch(window.location.href + "api" + "/post/like", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

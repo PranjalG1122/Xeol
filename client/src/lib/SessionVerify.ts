@@ -2,7 +2,7 @@ import { SessionVerifyProps } from "../components/types/Types";
 
 export default async function SessionVerify(): Promise<SessionVerifyProps> {
   try {
-    return await fetch(window.location.href + "/api" + "/session", {
+    return await fetch(window.location.href + "api" + "/session", {
       method: "GET",
       credentials: "include",
     })

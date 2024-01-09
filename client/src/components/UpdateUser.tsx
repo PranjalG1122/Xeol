@@ -31,7 +31,7 @@ export default function UpdateUser({
     e.preventDefault();
     setLoadingSubmit(true);
     console.log(updatedUserDetails);
-    fetch(window.location.href + "/api" + "/onboarding/update", {
+    fetch(window.location.href + "api" + "/onboarding/update", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
