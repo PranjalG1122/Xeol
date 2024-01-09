@@ -77,7 +77,7 @@ export interface FollowProps {
   description: string;
 }
 
-// Props for updating user details on UpdateUser Component
+// Props for updating user details on UpdateUser Component.
 export interface UpdatedUserDetailsProps {
   name: string;
   description: string;
