@@ -19,13 +19,10 @@ export default function User() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(
-      `https://${import.meta.env.VITE_VERCEL_URL}/api` + "/user/" + username,
-      {
-        method: "GET",
-        credentials: "include",
-      }
-    )
+    fetch(window.location.href + "/api" + "/user/" + username, {
+      method: "GET",
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data: { success: boolean; userDetails: UserDetailsPageProps }) => {
         return setUserDetails(data.userDetails);
