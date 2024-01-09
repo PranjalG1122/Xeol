@@ -8,13 +8,13 @@ export default defineConfig(({ command, mode }) => {
       port: 3000,
       proxy: {
         "/api": {
-          target: loadEnv(mode, process.cwd(), "").VITE_SERVER_LINK,
+          target: process.env.VITE_SERVER_LINK,
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, ""),
         },
-        "/.*": {
-          target: "/",
-        },
+      },
+      "/.*": {
+        target: "/",
       },
     },
   };
