@@ -29,6 +29,10 @@ app.get("/api", (req: Request, res: Response) => {
   return res.status(200).json({ success: true });
 });
 
+app.get("/api/ping", (req: Request, res: Response) => {
+  return res.status(200).json({ success: true, ping: true });
+});
+
 app.listen(5000, () => {
   console.log("Application started on port 5000!");
 });
