@@ -19,13 +19,13 @@ app.use(express.json());
 app.use(cors());
 app.options("*", cors());
 
-app.use("/auth", authRouter);
-app.use("/session", sessionRouter);
-app.use("/onboarding", onboardingRouter);
-app.use("/post", postRouter);
-app.use("/user", userRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/session", sessionRouter);
+app.use("/api/onboarding", onboardingRouter);
+app.use("/api/post", postRouter);
+app.use("/api/user", userRouter);
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/api", (req: Request, res: Response) => {
   return res.status(200).json({ success: true });
 });
 
