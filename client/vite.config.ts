@@ -10,7 +10,6 @@ export default defineConfig(({ command, mode }) => {
         "/api": {
           target: process.env.VITE_SERVER_LINK,
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, ""),
         },
       },
       "/.*": {
