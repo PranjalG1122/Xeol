@@ -25,10 +25,11 @@ export const enterEmail = async (req: Request, res: Response) => {
       text: "Verify your email",
       html: CLIENT_URL + "/verify/" + verificationToken,
     };
+    console.warn(msg);
     sgMail
       .send(msg)
-      .then(() => {
-        console.log("Email sent");
+      .then((data) => {
+        console.log("Email sent", data);
       })
       .catch((error) => {
         console.error(error);
