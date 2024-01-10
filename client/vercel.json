@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://xeol-server.vercel.app/$1"
+      "destination": "https://xeol-server.vercel.app/api/$1"
     },
     { "source": "/(.*)", "destination": "/" }
   ]
