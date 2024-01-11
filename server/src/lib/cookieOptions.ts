@@ -12,8 +12,7 @@ interface CookieOptionsProps {
 
 export const COOKIE_OPTIONS: CookieOptionsProps = {
   path: "/",
-  domain: "localhost",
-  secure: false,
-  sameSite: "lax",
+  secure: true,
+  sameSite: "strict",
   maxAge: 90 * 24 * 60 * 60 * 1000,
 };
