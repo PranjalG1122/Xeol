@@ -38,27 +38,41 @@ export const updateOnboarding = async (req: Request, res: Response) => {
 
     const { name, username, description } = req.body;
 
-    console.log({ name, username, description, file: req.file });
+    if (req.file) {
+      const blob = new Blob([req.file.buffer], { type: "image/png" });
 
-    // const blob = new Blob([req.file.buffer], { type: "image/png" });
+      const returnBlob = await put("avatar.png", blob, {
+        access: "public",
+        contentType: "image/png",
+      });
 
-    // const returnBlob = await put("avatar.png", blob, {
-    //   access: "public",
-    //   contentType: "image/png",
-    // });
+      await prisma.user.update({
+        where: {
+          email: sessionToken.email,
+        },
+        data: {
+          name: name,
+          avatar: returnBlob.url,
+          username: username,
+          description: description,
+          onboarded: true,
+        },
+      });
 
-    // await prisma.user.update({
-    //   where: {
-    //     email: sessionToken.email,
-    //   },
-    //   data: {
-    //     name: name,
-    //     username: username,
-    //     description: description,
-    //     avatar: req.file ? returnBlob.url : "/default.png",
-    //     onboarded: true,
-    //   },
-    // });
+      return res.status(200).json({ success: true });
+    }
+
+    await prisma.user.update({
+      where: {
+        email: sessionToken.email,
+      },
+      data: {
+        name: name,
+        username: username,
+        description: description,
+        onboarded: true,
+      },
+    });
 
     return res.status(200).json({ success: true });
   } catch (err) {
