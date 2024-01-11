@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 
 export const handleFollow = (username: string) => {
-  fetch(window.location.href + "api" + "/user/follow/" + username, {
+  fetch(new URL("/api/user/follow/" + username, window.location.href), {
     method: "GET",
     credentials: "include",
   })

@@ -19,7 +19,7 @@ export default function Home() {
   const [posts, setPosts] = useState<PostProps[] | null>(null);
 
   useEffect(() => {
-    fetch(window.location.href + "api" + "/post/getposts", {
+    fetch(new URL("/api/post/getposts", window.location.href), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

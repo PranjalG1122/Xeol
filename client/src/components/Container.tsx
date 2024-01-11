@@ -11,7 +11,7 @@ export default function Container({
   className?: string;
 }) {
   useEffect(() => {
-    fetch(window.location.href + "api" + "/session/details", {
+    fetch(new URL("/api/session/details", window.location.href), {
       method: "GET",
       credentials: "include",
     })

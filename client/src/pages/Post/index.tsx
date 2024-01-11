@@ -23,9 +23,8 @@ export default function Post() {
 
   const [newPostInView, setNewPostInView] = useState<boolean>(false);
   const replyBoxRef = useRef<HTMLTextAreaElement>(null);
-
   useEffect(() => {
-    fetch(window.location.href + "api" + "/post/" + id, {
+    fetch(new URL("/api/post/" + id, window.location.href), {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

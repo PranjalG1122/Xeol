@@ -29,7 +29,7 @@ export default function Onboarding() {
   const handleCheckUsername = () => {
     if (!VALID_USERNAME.test(userDetails.username))
       return setUsernameValidMessage("Username must be 3-25 characters long");
-    fetch(window.location.href + "api" + "/onboarding/username", {
+    fetch(new URL("/api/onboarding/username", window.location.href), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -63,7 +63,7 @@ export default function Onboarding() {
     const formData = new FormData(formRef.current);
 
     setSubmitLoading(true);
-    fetch(window.location.href + "api" + "/onboarding/update", {
+    fetch(new URL("/api/onboarding/update", window.location.href), {
       method: "POST",
       body: formData,
     })

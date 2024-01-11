@@ -17,7 +17,10 @@ export default function Follows() {
 
   useEffect(() => {
     fetch(
-      window.location.href + "api" + "/user/" + params.username + "/follows",
+      new URL(
+        "/api/user/" + params.username + "/follows",
+        window.location.href
+      ),
       {
         method: "GET",
         credentials: "include",

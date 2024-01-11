@@ -19,7 +19,7 @@ export default function Landing() {
       });
     }
     setLoadingSubmit(true);
-    fetch(window.location.href + "api" + "/auth", {
+    fetch(new URL("/api/auth", window.location.href), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

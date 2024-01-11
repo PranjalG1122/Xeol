@@ -12,7 +12,7 @@ export default function Verify() {
 
   const { token } = useParams<{ token: string }>();
   useEffect(() => {
-    fetch(window.location.href + "api" + "/auth/" + token, {
+    fetch(new URL("/api/auth/" + token, window.location.href), {
       method: "GET",
       credentials: "include",
     })

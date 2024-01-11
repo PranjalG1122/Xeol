@@ -36,7 +36,7 @@ export default function CreatePost({
       // setError("Post cannot be 0 characters long");
       return;
     }
-    fetch(window.location.href + "api" + "/post/newpost", {
+    fetch(new URL("/api/post/newpost", window.location.href), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -14,10 +14,12 @@ export default function Followers() {
   );
   const params = useParams();
   const navigate = useNavigate();
-
   useEffect(() => {
     fetch(
-      window.location.href + "api" + "/user/" + params.username + "/followers",
+      new URL(
+        "/api/user/" + params.username + "/followers",
+        window.location.href
+      ),
       {
         method: "GET",
         credentials: "include",
