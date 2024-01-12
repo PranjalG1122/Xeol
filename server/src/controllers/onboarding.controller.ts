@@ -29,14 +29,13 @@ export const verifyUsername = async (req: Request, res: Response) => {
 
 export const updateOnboarding = async (req: Request, res: Response) => {
   try {
-    const session = req.cookies.session;
-    const sessionToken = jwt.verify(session, JWT_SECRET) as {
+    const sessionToken = jwt.verify(req.cookies.session, JWT_SECRET) as {
       email: string;
       iat: number;
       exp: number;
     };
 
-    const { name, username, description } = req.body;
+    const { name, description, avatar } = req.body;
 
     if (req.file) {
       const blob = new Blob([req.file.buffer], { type: "image/png" });
@@ -46,35 +45,44 @@ export const updateOnboarding = async (req: Request, res: Response) => {
         contentType: "image/png",
       });
 
-      await prisma.user.update({
+      const updatedDetails = await prisma.user.update({
         where: {
           email: sessionToken.email,
         },
         data: {
           name: name,
           avatar: returnBlob.url,
-          username: username,
           description: description,
           onboarded: true,
         },
+        select: {
+          avatar: true,
+          name: true,
+          description: true,
+        },
       });
 
-      return res.status(200).json({ success: true });
+      return res.status(200).json({ success: true, updatedDetails });
     }
 
-    await prisma.user.update({
+    const updatedDetails = await prisma.user.update({
       where: {
         email: sessionToken.email,
       },
       data: {
         name: name,
-        username: username,
         description: description,
         onboarded: true,
+        avatar: avatar,
+      },
+      select: {
+        avatar: true,
+        name: true,
+        description: true,
       },
     });
 
-    return res.status(200).json({ success: true });
+    return res.status(200).json({ success: true, updatedDetails });
   } catch (err) {
     console.error(err);
     return res.status(501).json({ success: false });

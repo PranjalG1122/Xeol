@@ -3,7 +3,7 @@ import { UpdatedUserDetailsProps } from "./types/Types";
 import { Button, variants } from "./Button";
 import { X } from "react-feather";
 import { toast } from "react-toastify";
-import fetchUserDetailsLocal from "../lib/fetchUserDetailsLocal";
+import { useNavigate } from "react-router-dom";
 
 export default function UpdateUser({
   setUpdateUserInView,
@@ -16,42 +16,50 @@ export default function UpdateUser({
   avatar: string;
   description: string;
 }) {
-  const userDetails = fetchUserDetailsLocal();
   const [updatedUserDetails, setUpdatedUserDetails] =
     useState<UpdatedUserDetailsProps>({
       name: name,
       avatar: avatar,
-      username: userDetails ? userDetails.username : "",
       description: description,
     });
   const formRef = useRef<HTMLFormElement>(null);
   const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false);
 
+  const navigate = useNavigate();
+
   const handleSubmitUpdatedUserDetails = (e: any) => {
     e.preventDefault();
     setLoadingSubmit(true);
-    console.log(updatedUserDetails);
+
+    if (!formRef.current) return;
+
+    const formData = new FormData(formRef.current);
+    const newAvatar: File = formData.get("avatar") as File;
+
+    if (newAvatar.size < 1) {
+      formData.append("avatar", updatedUserDetails.avatar);
+    }
+
     fetch(new URL("/api/onboarding/update", window.location.href), {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(updatedUserDetails),
+      body: formData,
     })
       .then((res) => res.json())
       .then(
         (data: {
           success: boolean;
-          newUserDetails: UpdatedUserDetailsProps;
+          updatedDetails: UpdatedUserDetailsProps;
         }) => {
           if (data.success) {
             setLoadingSubmit(false);
-            // setUpdatedUserDetails(data.newUserDetails);
-            return toast("Updated Successfully!", {
+            setUpdatedUserDetails(data.updatedDetails);
+            setUpdateUserInView(false);
+            toast("Updated Successfully!", {
               className: "bg-green-600 dark:bg-green-600",
             });
+            return navigate(0);
           }
+          setUpdateUserInView(false);
           return toast("Something went wrong!", {
             className: "bg-red-600 dark:bg-red-600",
           });
@@ -81,6 +89,7 @@ export default function UpdateUser({
       <form
         encType="multipart/form-data"
         ref={formRef}
+        onSubmit={handleSubmitUpdatedUserDetails}
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -185,13 +194,7 @@ export default function UpdateUser({
           />
         </div>
 
-        <Button
-          type="submit"
-          onClick={(e) => {
-            handleSubmitUpdatedUserDetails(e);
-          }}
-          disabled={loadingSubmit}
-        >
+        <Button type="submit" disabled={loadingSubmit}>
           Save
         </Button>
       </form>

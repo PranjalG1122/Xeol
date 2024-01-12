@@ -3,6 +3,7 @@ import { Button, variants } from "../../components/Button";
 import Container from "../../components/Container";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { UpdatedUserDetailsProps } from "../../components/types/Types";
 
 type userDetailsProps = {
   name: string;
@@ -68,17 +69,22 @@ export default function Onboarding() {
       body: formData,
     })
       .then((res) => res.json())
-      .then((data: { success: boolean }) => {
-        if (data.success) {
-          return navigate("/home");
-        } else {
-          setSubmitLoading(false);
-          toast("Something went wrong!", {
-            className: "bg-red-600 dark:bg-red-600",
-          });
-          return;
+      .then(
+        (data: {
+          success: boolean;
+          updatedDetails: UpdatedUserDetailsProps;
+        }) => {
+          if (data.success) {
+            return navigate("/home");
+          } else {
+            setSubmitLoading(false);
+            toast("Something went wrong!", {
+              className: "bg-red-600 dark:bg-red-600",
+            });
+            return;
+          }
         }
-      });
+      );
   };
 
   return (

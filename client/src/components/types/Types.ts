@@ -82,5 +82,4 @@ export interface UpdatedUserDetailsProps {
   name: string;
   description: string;
   avatar: string;
-  username: string;
 }
