@@ -21,8 +21,8 @@ export const enterEmail = async (req: Request, res: Response) => {
     const msg = {
       to: req.body.email,
       from: "xeolpost@gmail.com",
-      subject: "Verify your email",
-      text: "Verify your email",
+      subject: "Authenticate with Xeol",
+      text: "Authenticate with Xeol",
       html: CLIENT_URL + "/verify/" + verificationToken,
     };
     console.warn(msg);
