@@ -45,7 +45,7 @@ export default function User() {
           <div className="flex lg:flex-row flex-col lg:gap-8 gap-2 lg:items-center">
             <img
               src={userDetails.avatar}
-              alt="ava"
+              alt="alt"
               className="lg:h-36 lg:w-36 h-16 w-16 rounded-full"
             />
             <div className="flex flex-col gap-2 items-start">
