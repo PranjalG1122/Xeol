@@ -55,9 +55,6 @@ export default function UpdateUser({
             setLoadingSubmit(false);
             setUpdatedUserDetails(data.updatedDetails);
             setUpdateUserInView(false);
-            toast("Updated Successfully!", {
-              className: "bg-green-600 dark:bg-green-600",
-            });
             return navigate(0);
           }
           setUpdateUserInView(false);
