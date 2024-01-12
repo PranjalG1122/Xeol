@@ -93,14 +93,25 @@ export default function User() {
                 userDetailsCurrent.username !== userDetails.username && (
                   <Button>Follow</Button>
                 )) || (
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setUpdateUserInView(true);
-                  }}
-                >
-                  Edit Profile
-                </Button>
+                <div className="flex flex-row items-center gap-2  ">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setUpdateUserInView(true);
+                    }}
+                  >
+                    Edit Profile
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      document.cookie =
+                        "session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+                      navigate(0);
+                    }}
+                  >
+                    Log Out
+                  </Button>
+                </div>
               )}
             </div>
           </div>
