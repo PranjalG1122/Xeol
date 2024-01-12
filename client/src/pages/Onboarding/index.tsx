@@ -4,6 +4,7 @@ import Container from "../../components/Container";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { UpdatedUserDetailsProps } from "../../components/types/Types";
+import { Check, Info, X } from "react-feather";
 
 type userDetailsProps = {
   name: string;
@@ -21,15 +22,15 @@ export default function Onboarding() {
     description: "",
   });
 
-  const [usernameValidMessage, setUsernameValidMessage] = useState<string>("");
+  const [validUsername, setValidUsername] = useState<boolean | null>(null);
   const [submitLoading, setSubmitLoading] = useState<boolean>(false);
   const [objectURL, setObjectURL] = useState<string>("");
 
-  const VALID_USERNAME = /^[a-zA-Z0-9_]{3,25}$/;
+  const VALID_USERNAME = /^[a-z0-9_]{3,25}$/;
 
   const handleCheckUsername = () => {
     if (!VALID_USERNAME.test(userDetails.username))
-      return setUsernameValidMessage("Username must be 3-25 characters long");
+      return setValidUsername(false);
     fetch(new URL("/api/onboarding/username", window.location.href), {
       method: "POST",
       headers: {
@@ -41,9 +42,9 @@ export default function Onboarding() {
       .then((res) => res.json())
       .then((data: { success: boolean }) => {
         if (data.success) {
-          setUsernameValidMessage("Username is valid");
+          setValidUsername(true);
         } else {
-          setUsernameValidMessage("Username is taken");
+          setValidUsername(false);
         }
       });
   };
@@ -141,16 +142,15 @@ export default function Onboarding() {
         <div className="flex flex-col items-start w-full gap-2">
           <div className="flex flex-row items-center gap-2 w-full">
             <p className="text-base font-semibold">Username</p>
-            <p
-              className={
-                "text-sm font-medium " +
-                (usernameValidMessage === "Username is valid"
-                  ? "text-green-500"
-                  : "text-red-500")
-              }
-            >
-              {usernameValidMessage}
-            </p>
+            <div title="Username must be 3-32 characters long, with only lowercase letters, numbers, and underscores.">
+              <Info className="h-4 w-4 text-neutral-500" />
+            </div>
+            {validUsername !== null &&
+              (validUsername ? (
+                <Check className="w-4 h-4 text-green-600" />
+              ) : (
+                <X className="h-4 w-4 text-red-600" />
+              ))}
           </div>
           <input
             placeholder="A unique username"
