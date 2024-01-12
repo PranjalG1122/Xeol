@@ -24,6 +24,7 @@ export default function UpdateUser({
     });
   const formRef = useRef<HTMLFormElement>(null);
   const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false);
+  const [hoverRemoveAvatar, setHoverRemoveAvatar] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -113,20 +114,26 @@ export default function UpdateUser({
               className="w-full h-full rounded-full"
               alt="avatar preview"
             />
-            <div className="w-full h-full flex items-center justify-center absolute top-0 rounded-full hover:bg-neutral-950 hover:bg-opacity-40 transition-all">
-              <button
-                className="text-black dark:text-white"
-                title="Remove Avatar"
-                type="button"
-                onClick={() => {
-                  setUpdatedUserDetails({
-                    ...updatedUserDetails,
-                    avatar: "/default.png",
-                  });
-                }}
-              >
-                <X />
-              </button>
+            <div
+              className="w-full h-full flex items-center justify-center absolute top-0 rounded-full hover:bg-neutral-950 hover:bg-opacity-40 transition-all"
+              onMouseEnter={() => setHoverRemoveAvatar(true)}
+              onMouseLeave={() => setHoverRemoveAvatar(false)}
+            >
+              {hoverRemoveAvatar && (
+                <button
+                  className="text-black dark:text-white"
+                  title="Remove Avatar"
+                  type="button"
+                  onClick={() => {
+                    setUpdatedUserDetails({
+                      ...updatedUserDetails,
+                      avatar: "/default.png",
+                    });
+                  }}
+                >
+                  <X />
+                </button>
+              )}
             </div>
           </div>
 
