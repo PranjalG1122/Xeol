@@ -1,8 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import express from "express";
-import { put } from "@vercel/blob";
+import { v2 as cloudinary } from "cloudinary";
 
 const JWT_SECRET = process.env.JWT_SECRET || "";
 
@@ -35,14 +34,27 @@ export const updateOnboarding = async (req: Request, res: Response) => {
       exp: number;
     };
 
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET,
+      secure: true,
+    });
+
     const { name, description, avatar } = req.body;
 
     if (req.file) {
       const blob = new Blob([req.file.buffer], { type: "image/png" });
 
-      const returnBlob = await put("avatar.png", blob, {
-        access: "public",
-        contentType: "image/png",
+      const avatarURL: string = await new Promise(async (resolve) => {
+        cloudinary.uploader
+          .upload_stream((error, uploadResult) => {
+            if (error) return res.status(500).json({ success: false });
+            return resolve(uploadResult);
+          })
+          .end(new Uint8Array(await blob.arrayBuffer()));
+      }).then((uploadResult: any) => {
+        return uploadResult.secure_url;
       });
 
       const updatedDetails = await prisma.user.update({
@@ -51,7 +63,7 @@ export const updateOnboarding = async (req: Request, res: Response) => {
         },
         data: {
           name: name,
-          avatar: returnBlob.url,
+          avatar: avatarURL,
           description: description,
           onboarded: true,
         },
@@ -85,6 +97,6 @@ export const updateOnboarding = async (req: Request, res: Response) => {
     return res.status(200).json({ success: true, updatedDetails });
   } catch (err) {
     console.error(err);
-    return res.status(501).json({ success: false });
+    return res.status(500).json({ success: false });
   }
 };
