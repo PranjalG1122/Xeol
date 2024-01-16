@@ -13,6 +13,8 @@ const prisma = new PrismaClient();
 
 export const enterEmail = async (req: Request, res: Response) => {
   try {
+
+    return res.status(200).json({ success: true });
     const verificationToken = jwt.sign({ email: req.body.email }, JWT_SECRET, {
       expiresIn: TOKEN_EXPIRY,
     });
@@ -23,19 +25,33 @@ export const enterEmail = async (req: Request, res: Response) => {
       from: "xeolpost@gmail.com",
       subject: "Authenticate with Xeol",
       text: "Authenticate with Xeol",
-      html: CLIENT_URL + "/verify/" + verificationToken,
+      html: `
+      <html>
+  <head>
+    <title>Verify your email</title>
+  </head>
+  <body
+    style="
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+    "
+  >
+    <h1>Authenticate your email</h1>
+    <a href="${CLIENT_URL}/verify/${verificationToken}">Click here</a>
+    <p>@Xeol 2024</p>
+    <p>Created by Pranjal Gupta</p>
+  </body>
+</html>
+`,
     };
-    console.warn(msg);
     sgMail
       .send(msg)
       .then((data) => {
-        console.log("Email sent", data);
+        return res.status(200).json({ success: true });
       })
       .catch((error) => {
-        console.error(error);
+        throw new Error(error);
       });
-
-    return res.status(200).json({ success: true });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ success: false });
