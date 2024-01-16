@@ -13,8 +13,6 @@ const prisma = new PrismaClient();
 
 export const enterEmail = async (req: Request, res: Response) => {
   try {
-
-    return res.status(200).json({ success: true });
     const verificationToken = jwt.sign({ email: req.body.email }, JWT_SECRET, {
       expiresIn: TOKEN_EXPIRY,
     });
