@@ -166,6 +166,7 @@ export default function UpdateUser({
             })}
             maxLength={64}
             name="name"
+            required
             value={updatedUserDetails.name}
             onChange={(e) =>
               setUpdatedUserDetails({
@@ -182,6 +183,7 @@ export default function UpdateUser({
             placeholder="A short description about yourself"
             maxLength={128}
             rows={4}
+            required
             className={
               variants({
                 variant: "input",

@@ -62,6 +62,17 @@ export default function Onboarding() {
     e.preventDefault();
     if (!formRef.current) return;
 
+    console.log(userDetails);
+
+    if (
+      userDetails.username.length < 1 ||
+      userDetails.name.length < 1 ||
+      userDetails.description.length < 1
+    )
+      return toast("Please fill in all the details!", {
+        className: "bg-red-600 dark:bg-red-600",
+      });
+
     const formData = new FormData(formRef.current);
 
     setSubmitLoading(true);
@@ -133,6 +144,7 @@ export default function Onboarding() {
               variant: "input",
             })}
             maxLength={64}
+            required
             name="name"
             onChange={(e) =>
               setUserDetails({ ...userDetails, name: e.target.value })
@@ -157,6 +169,7 @@ export default function Onboarding() {
             className={variants({
               variant: "input",
             })}
+            required
             maxLength={32}
             name="username"
             onChange={(e) =>
@@ -170,6 +183,7 @@ export default function Onboarding() {
           <textarea
             placeholder="A short description about yourself"
             maxLength={128}
+            required
             rows={4}
             className={
               variants({
