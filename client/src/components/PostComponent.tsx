@@ -17,12 +17,16 @@ import Heart from "./Heart";
 import { toast } from "react-toastify";
 
 export default function PostComponent({ post }: { post: PostProps }) {
+  const userDetails = fetchUserDetailsLocal();
+
   const [newPostInView, setNewPostInView] = useState<boolean>(false);
   const [loadingSetLike, setLoadingSetLike] = useState<boolean>(false);
+  const [loadingFollow, setLoadingFollow] = useState<boolean>(false);
+  const [follows, setFollows] = useState<boolean>(
+    userDetails!.follows.some((e) => e.username === post.user.username)
+  );
   const [postLiked, setPostLiked] = useState<boolean>(post.likes.length > 0);
   const [likeCount, setLikeCount] = useState<number>(post._count.likes);
-
-  const userDetails = fetchUserDetailsLocal();
 
   const handleLike = async () => {
     setLoadingSetLike(true);
@@ -42,6 +46,17 @@ export default function PostComponent({ post }: { post: PostProps }) {
       .then((data: { success: boolean }) => {
         data.success && setLoadingSetLike(false);
       });
+  };
+
+  const handleFollowFromPost = () => {
+    setLoadingFollow(true);
+    handleFollow(post.user.username).then((data) => {
+      setLoadingFollow(false);
+      if (data.success) return setFollows(!follows);
+      return toast("Something went wrong!", {
+        className: "bg-red-600 dark:bg-red-600",
+      });
+    });
   };
 
   return (
@@ -138,15 +153,12 @@ export default function PostComponent({ post }: { post: PostProps }) {
           </button>
           {userDetails &&
             post.user.username !== userDetails.username &&
-            (userDetails.follows.some(
-              (e) => e.username === post.user.username
-            ) ? (
+            (follows ? (
               <button
                 className="flex flex-row items-center gap-1 hover:text-red-500"
-                onClick={() => {
-                  handleFollow(post.user.username);
-                }}
+                onClick={handleFollowFromPost}
                 title="UnFollow"
+                disabled={loadingFollow}
               >
                 <UserMinus className="h-4 w-4" />
                 <p>Unfollow</p>
@@ -154,10 +166,9 @@ export default function PostComponent({ post }: { post: PostProps }) {
             ) : (
               <button
                 className="flex flex-row items-center gap-1 hover:text-green-500"
-                onClick={() => {
-                  handleFollow(post.user.username);
-                }}
+                onClick={handleFollowFromPost}
                 title="Follow"
+                disabled={loadingFollow}
               >
                 <UserPlus className="h-4 w-4" />
                 <p>Follow</p>

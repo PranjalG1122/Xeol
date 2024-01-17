@@ -8,13 +8,21 @@ import fetchUserDetailsLocal from "../../lib/fetchUserDetailsLocal";
 import { Button } from "../../components/Button";
 import UpdateUser from "../../components/UpdateUser";
 import LoadingIcon from "../../components/LoadingIcon";
+import { handleFollow } from "../../lib/handleFollow";
+import { toast } from "react-toastify";
 
 export default function User() {
+  const localUserDetails = fetchUserDetailsLocal();
+
   const { username } = useParams<{ username: string }>();
   const [userDetails, setUserDetails] = useState<UserDetailsPageProps | null>(
     null
   );
+  const [follows, setFollows] = useState<boolean>(
+    localUserDetails!.follows.some((e) => e.username === username)
+  );
   const [updateUserInView, setUpdateUserInView] = useState<boolean>(false);
+  const [loadingFollow, setLoadingFollow] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -37,6 +45,17 @@ export default function User() {
   }, [userDetails]);
 
   const userDetailsCurrent = fetchUserDetailsLocal();
+
+  const handleFollowFromPost = () => {
+    setLoadingFollow(true);
+    handleFollow(username!).then((data) => {
+      setLoadingFollow(false);
+      if (data.success) return setFollows(!follows);
+      return toast("Something went wrong!", {
+        className: "bg-red-600 dark:bg-red-600",
+      });
+    });
+  };
 
   return (
     <Container>
@@ -89,10 +108,24 @@ export default function User() {
                   </span>
                 </p>
               </div>
+
               {(userDetailsCurrent &&
-                userDetailsCurrent.username !== userDetails.username && (
-                  <Button>Follow</Button>
-                )) || (
+                userDetailsCurrent.username !== userDetails.username &&
+                (follows ? (
+                  <Button
+                    onClick={handleFollowFromPost}
+                    disabled={loadingFollow}
+                  >
+                    Unfollow
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={handleFollowFromPost}
+                    disabled={loadingFollow}
+                  >
+                    Follow
+                  </Button>
+                ))) || (
                 <div className="flex flex-row items-center gap-2  ">
                   <Button
                     variant="outline"

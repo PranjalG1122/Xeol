@@ -1,19 +1,19 @@
-import { toast } from "react-toastify";
-
 export const handleFollow = (username: string) => {
-  fetch(new URL("/api/user/follow/" + username, window.location.href), {
-    method: "GET",
-    credentials: "include",
-  })
-    .then((res) => res.json())
-    .then((data: { success: boolean }) => {
-      if (data.success) {
-        console.log(data);
-        // finish this bruv
-        return;
-      }
-      return toast("Something went wrong!", {
-        className: "bg-red-600 dark:bg-red-600",
+  return new Promise<{ success: boolean }>((resolve, reject) => {
+    fetch(new URL("/api/user/follow/" + username, window.location.href), {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data: { success: boolean }) => {
+        if (data.success) {
+          return resolve({
+            success: true,
+          });
+        }
+        return reject({
+          success: false,
+        });
       });
-    });
+  });
 };
