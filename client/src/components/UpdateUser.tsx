@@ -1,9 +1,10 @@
 import { useRef, useState } from "react";
-import { UpdatedUserDetailsProps } from "./types/Types";
+import { FollowProps } from "./types/Types";
 import { Button, variants } from "./Button";
 import { X } from "react-feather";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import fetchUserDetailsLocal from "../lib/fetchUserDetailsLocal";
 
 export default function UpdateUser({
   setUpdateUserInView,
@@ -16,12 +17,15 @@ export default function UpdateUser({
   avatar: string;
   description: string;
 }) {
-  const [updatedUserDetails, setUpdatedUserDetails] =
-    useState<UpdatedUserDetailsProps>({
-      name: name,
-      avatar: avatar,
-      description: description,
-    });
+  const userDetails = fetchUserDetailsLocal();
+
+  const [updatedUserDetails, setUpdatedUserDetails] = useState<FollowProps>({
+    name: name,
+    avatar: avatar,
+    description: description,
+    username: userDetails?.username || "",
+  });
+
   const formRef = useRef<HTMLFormElement>(null);
   const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false);
   const [hoverRemoveAvatar, setHoverRemoveAvatar] = useState<boolean>(false);
@@ -34,6 +38,15 @@ export default function UpdateUser({
 
     if (!formRef.current) return;
 
+    if (
+      updatedUserDetails.username.length < 1 ||
+      updatedUserDetails.name.length < 1 ||
+      updatedUserDetails.description.length < 1
+    )
+      return toast("Please fill in all the details!", {
+        className: "bg-red-600 dark:bg-red-600",
+      });
+
     const formData = new FormData(formRef.current);
     const newAvatar: File = formData.get("avatar") as File;
 
@@ -41,28 +54,25 @@ export default function UpdateUser({
       formData.append("avatar", updatedUserDetails.avatar);
     }
 
+    formData.append("username", updatedUserDetails.username);
+
     fetch(new URL("/api/onboarding/update", window.location.href), {
       method: "POST",
       body: formData,
     })
       .then((res) => res.json())
-      .then(
-        (data: {
-          success: boolean;
-          updatedDetails: UpdatedUserDetailsProps;
-        }) => {
-          if (data.success) {
-            setLoadingSubmit(false);
-            setUpdatedUserDetails(data.updatedDetails);
-            setUpdateUserInView(false);
-            return navigate(0);
-          }
+      .then((data: { success: boolean; updatedDetails: FollowProps }) => {
+        if (data.success) {
+          setLoadingSubmit(false);
+          setUpdatedUserDetails(data.updatedDetails);
           setUpdateUserInView(false);
-          return toast("Something went wrong!", {
-            className: "bg-red-600 dark:bg-red-600",
-          });
+          return navigate(0);
         }
-      );
+        setUpdateUserInView(false);
+        return toast("Something went wrong!", {
+          className: "bg-red-600 dark:bg-red-600",
+        });
+      });
   };
 
   const handleFileChange = () => {

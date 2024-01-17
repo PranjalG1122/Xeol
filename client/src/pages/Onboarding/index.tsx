@@ -90,10 +90,9 @@ export default function Onboarding() {
             return navigate("/home");
           } else {
             setSubmitLoading(false);
-            toast("Something went wrong!", {
+            return toast("Something went wrong!", {
               className: "bg-red-600 dark:bg-red-600",
             });
-            return;
           }
         }
       );

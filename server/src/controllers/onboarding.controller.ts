@@ -41,7 +41,7 @@ export const updateOnboarding = async (req: Request, res: Response) => {
       secure: true,
     });
 
-    const { name, description, avatar } = req.body;
+    const { name, description, avatar, username } = req.body;
 
     if (req.file) {
       const blob = new Blob([req.file.buffer], { type: "image/png" });
@@ -65,6 +65,7 @@ export const updateOnboarding = async (req: Request, res: Response) => {
           name: name,
           avatar: avatarURL,
           description: description,
+          username: username,
           onboarded: true,
         },
         select: {
@@ -85,6 +86,7 @@ export const updateOnboarding = async (req: Request, res: Response) => {
         name: name,
         description: description,
         onboarded: true,
+        username: username,
         avatar: avatar,
       },
       select: {
